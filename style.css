@@ -1,14 +1,14 @@
 :root {
-  /* Core Colors */
-  --bg-dark: #0f0a14; /* Very deep plum/black */
-  --bg-card: #181120;
-  --bg-accent: #2e1a38;
+  /* Core Colors - Jabuticabas Official Green */
+  --bg-dark: #08120a; /* Very deep forest green */
+  --bg-card: #111e13;
+  --bg-accent: #244026; /* Official Green */
   
-  --text-main: #fbf9f4; /* Off-white with warm tint */
-  --text-muted: #a39b95;
+  --text-main: #fbf9f4; /* Off-white */
+  --text-muted: #a3b1a5; /* Muted green-grey */
   
-  --accent-plum: #582b4a;
-  --accent-oak: #b08968; /* Elegant wood tone */
+  --accent-plum: #2e5232; /* Lighter green for backgrounds */
+  --accent-oak: #c2a878; /* Premium Champagne/Gold accent */
   
   /* Typography */
   --font-serif: 'Instrument Serif', serif;
@@ -183,12 +183,62 @@ p {
 .nav-links a:hover::after { width: 100%; }
 .nav-links a:hover { opacity: 1; }
 
-/* Hero Section */
+/* ==============================
+   ICEBERG-STYLE INTRO OVERLAY
+   ============================== */
+.intro-overlay {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: var(--bg-dark);
+  z-index: 9000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+.intro-overlay.done {
+  pointer-events: none;
+}
+
+.flash-photos {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 220px; height: 300px;
+}
+.flash-img {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  border-radius: 4px;
+}
+
+.expand-frame {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 220px; height: 300px;
+  overflow: hidden;
+  border-radius: 4px;
+  opacity: 0;
+}
+.expand-frame video {
+  width: 100%; height: 100%;
+  object-fit: cover;
+}
+
+/* ==============================
+   HERO SECTION (POST-INTRO)
+   ============================== */
 .hero {
   position: relative;
   height: 100vh;
   display: flex;
   align-items: center;
+  justify-content: center;
   overflow: hidden;
 }
 .hero-bg {
@@ -197,47 +247,42 @@ p {
   z-index: -1;
   overflow: hidden;
 }
-.hero-img {
-  width: 100%; height: 100%;
-  object-fit: cover;
-  transform: scale(1.1); /* for parallax */
-}
 .hero-overlay {
   position: absolute;
   top: 0; left: 0; width: 100%; height: 100%;
-  background: linear-gradient(to top, var(--bg-dark) 0%, rgba(15,10,20,0.2) 100%);
+  background: linear-gradient(to top, var(--bg-dark) 0%, rgba(8,18,10,0.4) 40%, rgba(8,18,10,0.15) 100%);
 }
 .hero-content {
-  padding: 0 10%;
-  max-width: 1000px;
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
-.hero-subtitle {
-  font-size: 0.85rem;
+.hero-title-giant {
+  font-family: var(--font-serif);
+  font-size: clamp(5rem, 15vw, 14rem);
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  color: var(--text-main);
+  line-height: 1;
+  opacity: 0;
+  transform: translateY(30px);
+}
+.hero-tagline {
+  font-size: 1rem;
   letter-spacing: 4px;
   text-transform: uppercase;
-  margin-bottom: 24px;
   color: var(--accent-oak);
-}
-.hero-title {
-  font-size: clamp(4rem, 10vw, 8rem);
-  margin-bottom: 24px;
-}
-.hero-title .line {
-  display: block;
-  overflow: hidden;
-}
-.hero-title .word {
-  display: inline-block;
-  transform: translateY(100%);
-}
-.hero-desc {
-  font-size: clamp(1.1rem, 2vw, 1.4rem);
-  max-width: 600px;
-  margin-bottom: 40px;
+  margin-top: 16px;
+  opacity: 0;
+  transform: translateY(20px);
 }
 .scroll-indicator {
   position: absolute;
-  bottom: 40px; left: 10%;
+  bottom: 40px; left: 50%;
+  transform: translateX(-50%);
   display: flex;
   align-items: center;
   gap: 16px;
@@ -245,6 +290,7 @@ p {
   letter-spacing: 2px;
   text-transform: uppercase;
   color: var(--text-muted);
+  opacity: 0;
 }
 .mouse {
   width: 24px; height: 36px;
@@ -326,13 +372,12 @@ p {
 /* Amenities */
 .amenities {
   padding: 120px 0;
-  background: #000;
+  background: var(--bg-dark);
 }
 .amenities-wrapper {
   display: flex;
   align-items: center;
   gap: 80px;
-  height: 100vh; /* For pinning */
 }
 .amenities-text {
   flex: 1;
@@ -518,7 +563,7 @@ footer {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  opacity: 0.5; /* Keeps text readable */
+  opacity: 0.8;
 }
 
 .section-header.center {

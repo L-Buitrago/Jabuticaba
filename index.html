@@ -38,27 +38,37 @@
         </div>
     </nav>
 
+    <!-- Iceberg-Style Intro Overlay -->
+    <div class="intro-overlay" id="introOverlay">
+        <!-- Flashing Photos -->
+        <div class="flash-photos">
+            <img src="https://residencialjabuticabas.com.br/wp-content/uploads/2021/06/WhatsApp-Image-2021-06-17-at-17.19.19-1.jpeg" class="flash-img" alt="">
+            <img src="https://residencialjabuticabas.com.br/wp-content/uploads/2021/06/WhatsApp-Image-2021-06-17-at-17.19.20.jpeg" class="flash-img" alt="">
+            <img src="https://residencialjabuticabas.com.br/wp-content/uploads/2021/06/WhatsApp-Image-2021-06-17-at-17.19.20-1.jpeg" class="flash-img" alt="">
+            <img src="https://residencialjabuticabas.com.br/wp-content/uploads/2021/06/WhatsApp-Image-2021-06-17-at-17.19.20-2.jpeg" class="flash-img" alt="">
+        </div>
+        <!-- Expanding frame that reveals video -->
+        <div class="expand-frame" id="expandFrame"></div>
+    </div>
+
     <!-- Hero Section -->
     <section class="hero" id="home">
         <div class="hero-bg">
-            <video autoplay muted loop playsinline class="hero-video">
+            <video autoplay muted loop playsinline class="hero-video" id="heroVideo">
                 <source src="https://residencialjabuticabas.com.br/wp-content/uploads/2021/04/Drone-Jabuticabas.mp4" type="video/mp4">
             </video>
             <div class="hero-overlay"></div>
         </div>
         <div class="hero-content">
-            <p class="hero-subtitle" data-speed="0.8">RESIDENCIAL DE ALTO PADRÃO</p>
-            <h1 class="hero-title">
-                <span class="line"><span class="word">Viva a Essência</span></span>
-                <span class="line"><span class="word italic-accent">do Privilégio.</span></span>
-            </h1>
-            <p class="hero-desc" data-speed="1.2">Um santuário entre Inimutaba e Curvelo, onde a natureza exuberante encontra a sofisticação da arquitetura contemporânea.</p>
-            <div class="scroll-indicator">
+            <h1 class="hero-title-giant" id="heroTitleGiant">JABUTICABA</h1>
+            <p class="hero-tagline" id="heroTagline">Residencial de Alto Padrão</p>
+            <div class="scroll-indicator" id="scrollIndicator">
                 <span>Descubra</span>
                 <div class="mouse"><div class="wheel"></div></div>
             </div>
         </div>
     </section>
+
 
     <!-- Concept Section (Bento Grid) -->
     <section class="concept" id="conceito">
