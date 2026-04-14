@@ -154,13 +154,15 @@ p {
   display: flex;
   align-items: center;
 }
-.logo-handwritten {
-  font-family: 'Shadows Into Light', cursive;
-  font-size: 2.2rem;
-  font-weight: 400;
-  color: var(--text-main);
-  letter-spacing: 1px;
-  line-height: 1;
+.logo-handwritten-img {
+  height: 48px;
+  width: auto;
+  filter: brightness(0) invert(1);
+  opacity: 0.95;
+  transition: opacity 0.3s var(--ease-smooth);
+}
+.navbar.scrolled .logo-handwritten-img {
+  height: 40px;
 }
 
 .nav-links {
@@ -263,22 +265,29 @@ p {
   stroke-dashoffset: 1000;
 }
 
-/* Hero Scribble Decorations */
-.hero-scribble {
+/* Iceberg Style Phrase Scribbles */
+.phrase-highlight, .phrase-underline {
+  position: relative;
+  display: inline-block;
+}
+.scribble-circle {
   position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 140%;
+  height: 160%;
   pointer-events: none;
-  z-index: 1;
-  opacity: 0;
+  z-index: 0;
 }
-.hero-scribble-1 {
-  top: 12%;
-  right: 5%;
-  width: 280px;
-}
-.hero-scribble-2 {
-  bottom: 18%;
-  left: 5%;
-  width: 200px;
+.scribble-underline {
+  position: absolute;
+  bottom: -4px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 110%;
+  height: 20px;
+  pointer-events: none;
 }
 
 /* ==============================
@@ -313,15 +322,20 @@ p {
 }
 
 /* Handwritten Reveal Text */
-.hero-handwritten {
+.hero-phrase {
   font-family: 'Shadows Into Light', cursive;
-  font-size: clamp(1.6rem, 3vw, 2.8rem);
+  font-size: clamp(1.4rem, 2.5vw, 2.2rem);
   font-weight: 400;
-  color: rgba(251, 249, 244, 0.85);
+  color: rgba(251, 249, 244, 0.9);
   letter-spacing: 2px;
-  margin-bottom: 24px;
+  margin-bottom: 32px;
   opacity: 0;
   transform: translateY(15px);
+  text-align: center;
+  line-height: 1.4;
+}
+.phrase-line {
+  display: block;
 }
 
 .hero-title-giant {
@@ -376,23 +390,11 @@ p {
   100% { transform: translate(-50%, 15px); opacity: 0; }
 }
 
-/* ==============================
-   CURTAIN SCROLL TRANSITION
-   ============================== */
-.curtain-wrapper {
-  position: fixed;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  z-index: 50;
-  pointer-events: none;
-  display: flex;
-}
-.curtain-strip {
-  flex: 1;
-  height: 100%;
-  background: var(--bg-dark);
-  transform: scaleY(0);
-  transform-origin: top center;
+/* Setup Next Section Content above PIN */
+.concept {
+  position: relative;
+  z-index: 10; /* Ensures it scrolls over the pure dark overlay */
+  background: var(--bg-dark); /* Solid background to push over the hero */
 }
 
 /* ==============================

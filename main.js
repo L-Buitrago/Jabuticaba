@@ -27,9 +27,9 @@ function setupVideoLoop() {
     const heroHandwritten = document.getElementById('heroHandwritten');
     const scrollInd = document.getElementById('scrollIndicator');
     const navbar = document.querySelector('.navbar');
+    
+    // Only SVG scribbles that are left are the ones in the phrase
     const scribblePaths = document.querySelectorAll('.scribble-path');
-    const scribbles = document.querySelectorAll('.scribble');
-    const heroScribbles = document.querySelectorAll('.hero-scribble');
 
     // Hide navbar during intro
     gsap.set(navbar, { opacity: 0, y: -40 });
@@ -78,22 +78,7 @@ function setupVideoLoop() {
             }, startTime + flashDuration);
     });
 
-    // Phase 1.5: Animate scribbles drawing themselves
-    scribbles.forEach((scribble, i) => {
-        const path = scribble.querySelector('.scribble-path');
-        const delay = 0.2 + i * 0.3;
-        introTl
-            .to(scribble, {
-                opacity: 1,
-                duration: 0.3,
-                ease: 'power2.out'
-            }, delay)
-            .to(path, {
-                strokeDashoffset: 0,
-                duration: 1.2,
-                ease: 'power2.inOut'
-            }, delay);
-    });
+    // Random scribbles removed as per request.
 
     // Phase 2: Show last image and hold
     const lastImg = flashImgs[flashImgs.length - 1];
@@ -122,13 +107,7 @@ function setupVideoLoop() {
             duration: 1.4,
             ease: 'power3.inOut'
         }, holdStart + 0.5)
-        // Fade out scribbles during expansion
-        .to(scribbles, {
-            opacity: 0,
-            duration: 0.6,
-            stagger: 0.1,
-            ease: 'power2.in'
-        }, holdStart + 0.8);
+
 
     // Phase 4: Fade out overlay to reveal the hero video
     introTl
@@ -161,27 +140,17 @@ function setupVideoLoop() {
             duration: 0.8,
             ease: 'power3.out'
         }, holdStart + 3.4)
-        // Hero scribble decorations
-        .to(heroScribbles, {
-            opacity: 1,
-            duration: 0.6,
-            stagger: 0.2,
-            ease: 'power2.out'
-        }, holdStart + 3.2);
-    
-    // Animate hero scribble paths drawing
-    heroScribbles.forEach((scribble) => {
-        const path = scribble.querySelector('.scribble-path');
-        if (path) {
-            const length = path.getTotalLength ? path.getTotalLength() : 1000;
-            path.style.strokeDasharray = length;
-            path.style.strokeDashoffset = length;
-            introTl.to(path, {
-                strokeDashoffset: 0,
-                duration: 1.8,
-                ease: 'power2.inOut'
-            }, holdStart + 3.2);
-        }
+    // Draw the Iceberg-style phrase scribbles (circle and underline)
+    const phraseScribbles = document.querySelectorAll('.scribble-path');
+    phraseScribbles.forEach((path, i) => {
+        const length = path.getTotalLength ? path.getTotalLength() : 1000;
+        path.style.strokeDasharray = length;
+        path.style.strokeDashoffset = length;
+        introTl.to(path, {
+            strokeDashoffset: 0,
+            duration: 1.4,
+            ease: 'power2.inOut'
+        }, holdStart + 2.8 + (i * 0.4));
     });
 
     introTl
@@ -257,50 +226,29 @@ gsap.to('.hero-bg', {
 });
 
 // ==============================
-// CURTAIN SCROLL EFFECT (Hero → Concept)
+// ICEBERG-STYLE SCROLL PINNING
 // ==============================
-const curtainStrips = document.querySelectorAll('.curtain-strip');
 
-// Phase 1: Curtains come down (covering the screen)
-const curtainTl = gsap.timeline({
+// 1. We pin the Hero section completely so it stays while you scroll
+ScrollTrigger.create({
+    trigger: '.hero',
+    start: 'top top',
+    end: '+=100%',     // Keeps it pinned for 1 viewport height
+    pin: true,
+    pinSpacing: false, // False means the next section will scroll OVER it!
+});
+
+// 2. As we scroll, we fade the hero overlay to pitch black to mimic a clean curtain effect
+gsap.to('.hero-overlay', {
+    background: 'linear-gradient(to top, rgba(8,18,10,1) 0%, rgba(8,18,10,1) 100%)',
+    opacity: 1,
+    ease: 'none',
     scrollTrigger: {
         trigger: '.hero',
-        start: 'bottom 90%',
-        end: 'bottom 10%',
-        scrub: 0.8,
+        start: 'top top',
+        end: '+=100%',
+        scrub: true,
     }
-});
-
-// Curtains scale in from top with stagger
-curtainTl.to(curtainStrips, {
-    scaleY: 1,
-    duration: 0.5,
-    stagger: {
-        each: 0.05,
-        from: 'edges'
-    },
-    ease: 'power2.inOut'
-});
-
-// Phase 2: Curtains go up (revealing concept section)
-const curtainRevealTl = gsap.timeline({
-    scrollTrigger: {
-        trigger: '#conceito',
-        start: 'top 95%',
-        end: 'top 40%',
-        scrub: 0.8,
-    }
-});
-
-curtainRevealTl.to(curtainStrips, {
-    scaleY: 0,
-    transformOrigin: 'bottom center',
-    duration: 0.5,
-    stagger: {
-        each: 0.05,
-        from: 'center'
-    },
-    ease: 'power2.inOut'
 });
 
 // ==============================
