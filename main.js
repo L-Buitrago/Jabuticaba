@@ -1,16 +1,35 @@
 gsap.registerPlugin(ScrollTrigger);
 
 // ==============================
+// VIDEO LOOP CONTROL (8s → 53s)
+// ==============================
+const heroVideo = document.getElementById('heroVideo');
+
+function setupVideoLoop() {
+    heroVideo.currentTime = 8;
+    heroVideo.play();
+    
+    heroVideo.addEventListener('timeupdate', () => {
+        if (heroVideo.currentTime >= 53) {
+            heroVideo.currentTime = 8;
+        }
+    });
+}
+
+// ==============================
 // ICEBERG-STYLE INTRO ANIMATION
 // ==============================
 (function() {
     const overlay = document.getElementById('introOverlay');
     const flashImgs = document.querySelectorAll('.flash-img');
-    const heroVideo = document.getElementById('heroVideo');
     const heroTitle = document.getElementById('heroTitleGiant');
     const heroTagline = document.getElementById('heroTagline');
+    const heroHandwritten = document.getElementById('heroHandwritten');
     const scrollInd = document.getElementById('scrollIndicator');
     const navbar = document.querySelector('.navbar');
+    const scribblePaths = document.querySelectorAll('.scribble-path');
+    const scribbles = document.querySelectorAll('.scribble');
+    const heroScribbles = document.querySelectorAll('.hero-scribble');
 
     // Hide navbar during intro
     gsap.set(navbar, { opacity: 0, y: -40 });
@@ -18,25 +37,33 @@ gsap.registerPlugin(ScrollTrigger);
     // Lock scroll during intro
     document.body.style.overflow = 'hidden';
 
+    // Calculate stroke lengths for scribble animation
+    scribblePaths.forEach(path => {
+        const length = path.getTotalLength ? path.getTotalLength() : 1000;
+        path.style.strokeDasharray = length;
+        path.style.strokeDashoffset = length;
+    });
+
+
     const introTl = gsap.timeline({
         onComplete: () => {
             document.body.style.overflow = '';
             overlay.classList.add('done');
+            // Start video after intro
+            setupVideoLoop();
         }
     });
 
-    // Phase 1: Flash photos rapidly (like Iceberg)
-    // Each photo appears small in the center, with staggered timing
+    // Phase 1: Flash photos rapidly — ALL STRAIGHT (no rotation)
     const flashDuration = 0.15;
     const flashGap = 0.25;
 
     flashImgs.forEach((img, i) => {
         const startTime = i * flashGap;
-        // Each image: scale up from small, flash visible, then disappear
         introTl
             .set(img, { 
                 scale: 0.8, 
-                rotation: (Math.random() - 0.5) * 15 // Slight random rotation
+                rotation: 0 // Straight — no random rotation
             }, startTime)
             .to(img, {
                 opacity: 1,
@@ -51,7 +78,24 @@ gsap.registerPlugin(ScrollTrigger);
             }, startTime + flashDuration);
     });
 
-    // Phase 2: Show last image and hold it
+    // Phase 1.5: Animate scribbles drawing themselves
+    scribbles.forEach((scribble, i) => {
+        const path = scribble.querySelector('.scribble-path');
+        const delay = 0.2 + i * 0.3;
+        introTl
+            .to(scribble, {
+                opacity: 1,
+                duration: 0.3,
+                ease: 'power2.out'
+            }, delay)
+            .to(path, {
+                strokeDashoffset: 0,
+                duration: 1.2,
+                ease: 'power2.inOut'
+            }, delay);
+    });
+
+    // Phase 2: Show last image and hold
     const lastImg = flashImgs[flashImgs.length - 1];
     const holdStart = flashImgs.length * flashGap + 0.1;
 
@@ -64,7 +108,7 @@ gsap.registerPlugin(ScrollTrigger);
             ease: 'power2.out'
         }, holdStart);
 
-    // Phase 3: Expand the photo to fullscreen & crossfade to video
+    // Phase 3: Expand the photo to fullscreen
     introTl
         .to('.flash-photos', {
             width: '100vw',
@@ -77,9 +121,16 @@ gsap.registerPlugin(ScrollTrigger);
             borderRadius: 0,
             duration: 1.4,
             ease: 'power3.inOut'
-        }, holdStart + 0.5);
+        }, holdStart + 0.5)
+        // Fade out scribbles during expansion
+        .to(scribbles, {
+            opacity: 0,
+            duration: 0.6,
+            stagger: 0.1,
+            ease: 'power2.in'
+        }, holdStart + 0.8);
 
-    // Phase 4: Fade out overlay to reveal the hero video underneath
+    // Phase 4: Fade out overlay to reveal the hero video
     introTl
         .to(overlay, {
             opacity: 0,
@@ -87,31 +138,64 @@ gsap.registerPlugin(ScrollTrigger);
             ease: 'power2.inOut'
         }, holdStart + 1.6);
 
-    // Phase 5: Animate in the giant title
+    // Phase 5: Animate handwritten text (fade in + slide up)
+    introTl
+        .to(heroHandwritten, {
+            opacity: 1,
+            y: 0,
+            duration: 1.2,
+            ease: 'power3.out'
+        }, holdStart + 2.0);
+
+    // Phase 6: Animate main title and elements
     introTl
         .to(heroTitle, {
             opacity: 1,
             y: 0,
             duration: 1.2,
             ease: 'power4.out'
-        }, holdStart + 2.0)
+        }, holdStart + 3.0)
         .to(heroTagline, {
             opacity: 1,
             y: 0,
             duration: 0.8,
             ease: 'power3.out'
-        }, holdStart + 2.4)
+        }, holdStart + 3.4)
+        // Hero scribble decorations
+        .to(heroScribbles, {
+            opacity: 1,
+            duration: 0.6,
+            stagger: 0.2,
+            ease: 'power2.out'
+        }, holdStart + 3.2);
+    
+    // Animate hero scribble paths drawing
+    heroScribbles.forEach((scribble) => {
+        const path = scribble.querySelector('.scribble-path');
+        if (path) {
+            const length = path.getTotalLength ? path.getTotalLength() : 1000;
+            path.style.strokeDasharray = length;
+            path.style.strokeDashoffset = length;
+            introTl.to(path, {
+                strokeDashoffset: 0,
+                duration: 1.8,
+                ease: 'power2.inOut'
+            }, holdStart + 3.2);
+        }
+    });
+
+    introTl
         .to(scrollInd, {
             opacity: 1,
             duration: 0.6,
             ease: 'power2.out'
-        }, holdStart + 2.8)
+        }, holdStart + 3.8)
         .to(navbar, {
             opacity: 1,
             y: 0,
             duration: 0.8,
             ease: 'power3.out'
-        }, holdStart + 2.6);
+        }, holdStart + 3.6);
 
 })();
 
@@ -173,6 +257,53 @@ gsap.to('.hero-bg', {
 });
 
 // ==============================
+// CURTAIN SCROLL EFFECT (Hero → Concept)
+// ==============================
+const curtainStrips = document.querySelectorAll('.curtain-strip');
+
+// Phase 1: Curtains come down (covering the screen)
+const curtainTl = gsap.timeline({
+    scrollTrigger: {
+        trigger: '.hero',
+        start: 'bottom 90%',
+        end: 'bottom 10%',
+        scrub: 0.8,
+    }
+});
+
+// Curtains scale in from top with stagger
+curtainTl.to(curtainStrips, {
+    scaleY: 1,
+    duration: 0.5,
+    stagger: {
+        each: 0.05,
+        from: 'edges'
+    },
+    ease: 'power2.inOut'
+});
+
+// Phase 2: Curtains go up (revealing concept section)
+const curtainRevealTl = gsap.timeline({
+    scrollTrigger: {
+        trigger: '#conceito',
+        start: 'top 95%',
+        end: 'top 40%',
+        scrub: 0.8,
+    }
+});
+
+curtainRevealTl.to(curtainStrips, {
+    scaleY: 0,
+    transformOrigin: 'bottom center',
+    duration: 0.5,
+    stagger: {
+        each: 0.05,
+        from: 'center'
+    },
+    ease: 'power2.inOut'
+});
+
+// ==============================
 // SCROLL REVEALS
 // ==============================
 const revealElements = document.querySelectorAll('.reveal-up');
@@ -212,6 +343,7 @@ gsap.from('.reveal-right', {
     }
 });
 
+// ==============================
 // AMENITIES INTERACTIVE LIST
 // ==============================
 const listItems = document.querySelectorAll('.amenities-list li');

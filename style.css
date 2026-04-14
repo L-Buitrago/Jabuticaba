@@ -124,7 +124,9 @@ p {
   transform: translateY(-2px);
 }
 
-/* Navigation */
+/* ==============================
+   NAVIGATION
+   ============================== */
 .navbar {
   position: fixed;
   top: 0; left: 0; right: 0;
@@ -133,7 +135,7 @@ p {
   transition: all 0.4s var(--ease-smooth);
 }
 .navbar.scrolled {
-  background: rgba(15, 10, 20, 0.85);
+  background: rgba(8, 18, 10, 0.9);
   backdrop-filter: blur(12px);
   padding: 16px 0;
   border-bottom: 1px solid rgba(255,255,255,0.05);
@@ -146,19 +148,21 @@ p {
   justify-content: space-between;
   align-items: center;
 }
+
+/* Handwritten Logo Text */
 .logo {
-  font-family: var(--font-serif);
-  font-size: 1.8rem;
   display: flex;
   align-items: center;
-  gap: 8px;
 }
-.logo-leaf {
-  width: 12px; height: 12px;
-  background: var(--accent-oak);
-  border-radius: 50% 0 50% 50%;
-  display: inline-block;
+.logo-handwritten {
+  font-family: 'Shadows Into Light', cursive;
+  font-size: 2.2rem;
+  font-weight: 400;
+  color: var(--text-main);
+  letter-spacing: 1px;
+  line-height: 1;
 }
+
 .nav-links {
   display: flex;
   gap: 40px;
@@ -214,6 +218,7 @@ p {
   object-fit: cover;
   opacity: 0;
   border-radius: 4px;
+  /* NO rotation — photos are straight */
 }
 
 .expand-frame {
@@ -230,8 +235,54 @@ p {
   object-fit: cover;
 }
 
+/* Scribble SVG Animations */
+.scribble {
+  position: absolute;
+  pointer-events: none;
+  opacity: 0;
+}
+.scribble-1 {
+  top: 15%;
+  right: 10%;
+  width: 200px;
+}
+.scribble-2 {
+  bottom: 20%;
+  left: 8%;
+  width: 150px;
+}
+.scribble-3 {
+  top: 40%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 120px;
+}
+
+.scribble-path {
+  stroke-dasharray: 1000;
+  stroke-dashoffset: 1000;
+}
+
+/* Hero Scribble Decorations */
+.hero-scribble {
+  position: absolute;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0;
+}
+.hero-scribble-1 {
+  top: 12%;
+  right: 5%;
+  width: 280px;
+}
+.hero-scribble-2 {
+  bottom: 18%;
+  left: 5%;
+  width: 200px;
+}
+
 /* ==============================
-   HERO SECTION (POST-INTRO)
+   HERO SECTION
    ============================== */
 .hero {
   position: relative;
@@ -260,6 +311,19 @@ p {
   flex-direction: column;
   align-items: center;
 }
+
+/* Handwritten Reveal Text */
+.hero-handwritten {
+  font-family: 'Shadows Into Light', cursive;
+  font-size: clamp(1.6rem, 3vw, 2.8rem);
+  font-weight: 400;
+  color: rgba(251, 249, 244, 0.85);
+  letter-spacing: 2px;
+  margin-bottom: 24px;
+  opacity: 0;
+  transform: translateY(15px);
+}
+
 .hero-title-giant {
   font-family: var(--font-serif);
   font-size: clamp(5rem, 15vw, 14rem);
@@ -312,9 +376,32 @@ p {
   100% { transform: translate(-50%, 15px); opacity: 0; }
 }
 
-/* Concept Bento */
+/* ==============================
+   CURTAIN SCROLL TRANSITION
+   ============================== */
+.curtain-wrapper {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  z-index: 50;
+  pointer-events: none;
+  display: flex;
+}
+.curtain-strip {
+  flex: 1;
+  height: 100%;
+  background: var(--bg-dark);
+  transform: scaleY(0);
+  transform-origin: top center;
+}
+
+/* ==============================
+   CONCEPT BENTO
+   ============================== */
 .concept {
   padding: 120px 0;
+  position: relative;
+  z-index: 2;
 }
 .section-header {
   max-width: 600px;
@@ -369,7 +456,9 @@ p {
 .bento-dark { background: var(--bg-accent); }
 .bento-accent { background: var(--accent-plum); }
 
-/* Amenities */
+/* ==============================
+   AMENITIES
+   ============================== */
 .amenities {
   padding: 120px 0;
   background: var(--bg-dark);
@@ -430,7 +519,9 @@ p {
   transform: scale(1);
 }
 
-/* Contact */
+/* ==============================
+   CONTACT
+   ============================== */
 .contact {
   padding: 120px 0;
   background: var(--bg-card);
@@ -508,7 +599,9 @@ p {
   margin-top: 16px;
 }
 
-/* Footer */
+/* ==============================
+   FOOTER
+   ============================== */
 footer {
   padding: 40px 0;
   border-top: 1px solid rgba(255,255,255,0.05);
@@ -536,29 +629,9 @@ footer {
   transform: translateY(40px);
 }
 
-@media (max-width: 900px) {
-  .bento-grid {
-    grid-template-columns: 1fr;
-    grid-template-rows: auto;
-  }
-  .bento-large {
-    grid-column: 1;
-    grid-row: 1;
-    min-height: 400px;
-  }
-  .amenities-wrapper {
-    flex-direction: column;
-    height: auto;
-  }
-  .contact-grid {
-    grid-template-columns: 1fr;
-  }
-  .nav-links {
-    display: none;
-  }
-}
-
-/* New Styles (Video, Testimonials, Map) */
+/* ==============================
+   NEW STYLES
+   ============================== */
 .hero-video {
   width: 100%;
   height: 100%;
@@ -626,7 +699,7 @@ footer {
   z-index: 10;
 }
 .map-card {
-  background: rgba(24, 17, 32, 0.9);
+  background: rgba(8, 18, 10, 0.9);
   backdrop-filter: blur(12px);
   padding: 40px;
   border-radius: var(--radius-lg);
@@ -641,7 +714,29 @@ footer {
   color: var(--text-main);
 }
 
+/* ==============================
+   RESPONSIVE
+   ============================== */
 @media (max-width: 900px) {
+  .bento-grid {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+  }
+  .bento-large {
+    grid-column: 1;
+    grid-row: 1;
+    min-height: 400px;
+  }
+  .amenities-wrapper {
+    flex-direction: column;
+    height: auto;
+  }
+  .contact-grid {
+    grid-template-columns: 1fr;
+  }
+  .nav-links {
+    display: none;
+  }
   .testimonials-grid {
     grid-template-columns: 1fr;
   }
@@ -653,5 +748,8 @@ footer {
   }
   .map-card {
     max-width: 100%;
+  }
+  .hero-scribble {
+    display: none;
   }
 }
