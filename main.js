@@ -1,14 +1,53 @@
 gsap.registerPlugin(ScrollTrigger);
 
 // ==============================
-// VIDEO LOOP CONTROL (8s → 53s)
+// VIDEO REFERENCES
 // ==============================
 const heroVideo = document.getElementById('heroVideo');
+const introVideo = document.getElementById('introVideo');
 
-function setupVideoLoop() {
+// Preload both videos
+heroVideo.preload = 'auto';
+introVideo.preload = 'auto';
+introVideo.currentTime = 8;
+heroVideo.currentTime = 8;
+
+// Start hero video playing silently behind the overlay immediately
+// so it's ready and in-sync when we reveal it
+function bootHeroVideo() {
     heroVideo.currentTime = 8;
-    heroVideo.play();
-    
+    heroVideo.play().catch(() => {});
+}
+
+// Try to start it ASAP
+if (heroVideo.readyState >= 3) {
+    bootHeroVideo();
+} else {
+    heroVideo.addEventListener('canplaythrough', bootHeroVideo, { once: true });
+}
+
+// Promise: intro video ready
+const introVideoReady = new Promise((resolve) => {
+    if (introVideo.readyState >= 3) { resolve(); return; }
+    introVideo.addEventListener('canplaythrough', () => resolve(), { once: true });
+    setTimeout(resolve, 3000);
+});
+
+// Sync interval — keeps heroVideo matched to introVideo
+let syncInterval = null;
+function startSync() {
+    syncInterval = setInterval(() => {
+        if (Math.abs(heroVideo.currentTime - introVideo.currentTime) > 0.2) {
+            heroVideo.currentTime = introVideo.currentTime;
+        }
+    }, 200);
+}
+function stopSync() {
+    if (syncInterval) clearInterval(syncInterval);
+}
+
+// Video loop (after intro completes)
+function enableLoop() {
     heroVideo.addEventListener('timeupdate', () => {
         if (heroVideo.currentTime >= 53) {
             heroVideo.currentTime = 8;
@@ -17,22 +56,16 @@ function setupVideoLoop() {
 }
 
 // ==============================
-// ICEBERG-STYLE INTRO ANIMATION
+// ICEBERG-STYLE INTRO ANIMATION (UNTOUCHED)
 // ==============================
 (function() {
     const overlay = document.getElementById('introOverlay');
     const flashImgs = document.querySelectorAll('.flash-img');
-    const expandBox = document.getElementById('expandBox');
-    const expandFrame = document.getElementById('expandFrame');
+    const flashContainer = document.getElementById('flashPhotos');
     const heroTitle = document.getElementById('heroTitleGiant');
-    const heroTagline = document.getElementById('heroTagline');
     const heroHandwritten = document.getElementById('heroHandwritten');
     const scrollInd = document.getElementById('scrollIndicator');
     const navbar = document.querySelector('.navbar');
-    const curtainSlices = document.querySelectorAll('.curtain-slice');
-    
-    // Only SVG scribbles that are left are the ones in the phrase and pen test
-    const scribblePaths = document.querySelectorAll('.scribble-path, .pen-test-path');
 
     // Hide navbar during intro
     gsap.set(navbar, { opacity: 0, y: -40 });
@@ -41,162 +74,149 @@ function setupVideoLoop() {
     document.body.style.overflow = 'hidden';
 
     // Calculate stroke lengths for scribble animation
+    const scribblePaths = document.querySelectorAll('.scribble-path, .pen-test-path');
     scribblePaths.forEach(path => {
         const length = path.getTotalLength ? path.getTotalLength() : 1000;
         path.style.strokeDasharray = length;
         path.style.strokeDashoffset = length;
     });
 
-
-    const introTl = gsap.timeline({
-        onComplete: () => {
-            document.body.style.overflow = '';
-            overlay.classList.add('done');
-            // Start video after intro
-            setupVideoLoop();
-        }
+    // Wait for intro video to be ready, THEN start
+    introVideoReady.then(() => {
+        runIntro();
     });
 
-    // Phase 1: Flash photos rapidly — ALL STRAIGHT (no rotation)
-    const flashDuration = 0.15;
-    const flashGap = 0.25;
+    function runIntro() {
+        const introTl = gsap.timeline({
+            onComplete: () => {
+                document.body.style.overflow = '';
+                overlay.classList.add('done');
+                // Stop intro video, enable loop on hero video
+                introVideo.pause();
+                enableLoop();
+                setTimeout(() => { overlay.style.display = 'none'; }, 100);
+            }
+        });
 
-    flashImgs.forEach((img, i) => {
-        const startTime = i * flashGap;
-        introTl
-            .set(img, { 
-                scale: 0.8, 
-                rotation: 0 // Straight — no random rotation
-            }, startTime)
-            .to(img, {
-                opacity: 1,
-                scale: 1,
-                duration: flashDuration,
-                ease: 'power2.in'
-            }, startTime)
-            .to(img, {
-                opacity: 0,
-                duration: flashDuration,
-                ease: 'power2.out'
-            }, startTime + flashDuration);
-    });
+        // Phase 1: Flash photos rapidly
+        const flashDuration = 0.15;
+        const flashGap = 0.25;
 
-    // Random scribbles removed as per request.
+        flashImgs.forEach((img, i) => {
+            const startTime = i * flashGap;
+            introTl
+                .set(img, { scale: 0.8, rotation: 0 }, startTime)
+                .to(img, {
+                    opacity: 1,
+                    scale: 1,
+                    duration: flashDuration,
+                    ease: 'power2.in'
+                }, startTime)
+                .to(img, {
+                    opacity: 0,
+                    duration: flashDuration,
+                    ease: 'power2.out'
+                }, startTime + flashDuration);
+        });
 
-    // Phase 2: Show last image and hold momentarily
-    const lastImg = flashImgs[flashImgs.length - 1];
-    const holdStart = flashImgs.length * flashGap + 0.1;
+        // Phase 2: After flashing, show the VIDEO inside the small rectangle
+        const holdStart = flashImgs.length * flashGap + 0.2;
 
-    introTl
-        .to(lastImg, {
+        // Start playing the intro video and sync hero video behind it
+        introTl.call(() => {
+            introVideo.currentTime = 8;
+            introVideo.play().catch(() => {});
+            // Start syncing the hero video to match intro video
+            startSync();
+        }, null, holdStart);
+
+        introTl.to(introVideo, {
             opacity: 1,
-            scale: 1,
-            rotation: 0,
-            duration: 0.3,
+            duration: 0.5,
             ease: 'power2.out'
         }, holdStart);
 
-    // Phase 3: Hide flash photos, reveal expand box, and slide curtain down
-    const curtainDropTime = holdStart + 0.6;
-    
-    // Flash photos disappear into white expanding box
-    introTl
-        .set('.flash-photos', { opacity: 0 }, curtainDropTime)
-        .set(expandBox, { opacity: 1 }, curtainDropTime)
-        // Expand the tiny white box very fast to fill the screen
-        .to(expandBox, {
-            width: '100vw',
-            height: '100vh',
-            duration: 0.8,
-            ease: "expo.in"
-        }, curtainDropTime);
+        // Phase 3: THE VIDEO RECTANGLE EXPANDS to fullscreen (like Iceberg!)
+        const expandStart = holdStart + 1.0;
 
-    // Right after white flash, the curtain falls over it while video starts playing underneath
-    introTl
-        .set(expandFrame, { opacity: 1 }, curtainDropTime + 0.8) // Reveal video
-        .set(overlay, { 
-            background: 'transparent',
-            pointerEvents: 'none'
-        }, curtainDropTime + 0.8)
-        .set(expandBox, { opacity: 0 }, curtainDropTime + 0.8); // Hide white box
+        introTl
+            .to(flashContainer, {
+                width: '100vw',
+                height: '100vh',
+                borderRadius: 0,
+                duration: 1.6,
+                ease: 'power3.inOut'
+            }, expandStart)
+            .to(introVideo, {
+                borderRadius: 0,
+                duration: 1.6,
+                ease: 'power3.inOut'
+            }, expandStart);
 
-    // Curtain drop transition (from top to bottom staggered)
-    introTl.to(curtainSlices, {
-        scaleY: 1,
-        duration: 0.8,
-        stagger: 0.08,
-        ease: 'power3.inOut',
-        transformOrigin: 'top'
-    }, curtainDropTime + 0.2);
+        // Phase 4: Cross-fade overlay away (hero video is already in sync behind it)
+        const fadeStart = expandStart + 1.6;
 
-    // Phase 4: Curtain pulls UP to reveal the hero section underneath
-    const curtainPullTime = curtainDropTime + 1.2;
-    introTl.to(curtainSlices, {
-        scaleY: 0,
-        duration: 0.8,
-        stagger: {
-            amount: 0.3,
-            from: "center"
-        },
-        ease: 'power4.inOut',
-        transformOrigin: 'bottom'
-    }, curtainPullTime);
+        // Final hard sync right before the overlay fades
+        introTl.call(() => {
+            heroVideo.currentTime = introVideo.currentTime;
+            stopSync();
+        }, null, fadeStart - 0.05);
 
-    // Cleanup phase
-    introTl.to(overlay, {
-        opacity: 0,
-        duration: 0.1
-    }, curtainPullTime + 1.2);
+        introTl.to(overlay, {
+            opacity: 0,
+            duration: 1.0,
+            ease: 'power2.inOut'
+        }, fadeStart);
 
-    // Phase 5: Animate handwritten text (fade in + slide up)
-    const afterCurtain = curtainPullTime + 0.4;
-    introTl
-        .to(heroHandwritten, {
-            opacity: 1,
-            y: 0,
-            duration: 1.2,
-            ease: 'power3.out'
-        }, afterCurtain);
+        // Phase 5: Reveal hero content
+        const revealStart = fadeStart + 0.5;
 
-    // Phase 6: Animate main title and elements
-    introTl
-        .to(heroTitle, {
-            opacity: 1,
-            y: 0,
-            duration: 1.2,
-            ease: 'power4.out'
-        }, afterCurtain + 0.4)
-    
-    // Draw the Iceberg-style phrase scribbles (circle, underline, and pen test)
-    const phraseScribbles = document.querySelectorAll('.scribble-path, .pen-test-path');
-    phraseScribbles.forEach((path, i) => {
-        const length = path.getTotalLength ? path.getTotalLength() : 1000;
-        path.style.strokeDasharray = length;
-        path.style.strokeDashoffset = length;
-        introTl.to(path, {
-            strokeDashoffset: 0,
-            duration: 1.6,
-            ease: 'power3.inOut'
-        }, afterCurtain + 0.5 + (i * 0.3));
-    });
+        introTl
+            .to(heroTitle, {
+                opacity: 1,
+                y: 0,
+                duration: 1.4,
+                ease: 'power4.out'
+            }, revealStart);
 
-    introTl
-        .to(scrollInd, {
-            opacity: 1,
-            duration: 0.6,
-            ease: 'power2.out'
-        }, afterCurtain + 1.5)
-        .to(navbar, {
-            opacity: 1,
-            y: 0,
-            duration: 0.8,
-            ease: 'power3.out'
-        }, afterCurtain + 1.2);
+        introTl
+            .to(heroHandwritten, {
+                opacity: 1,
+                y: 0,
+                duration: 1.2,
+                ease: 'power3.out'
+            }, revealStart + 0.3);
 
+        // Draw scribbles
+        const phraseScribbles = document.querySelectorAll('.scribble-path, .pen-test-path');
+        phraseScribbles.forEach((path, i) => {
+            const length = path.getTotalLength ? path.getTotalLength() : 1000;
+            path.style.strokeDasharray = length;
+            path.style.strokeDashoffset = length;
+            introTl.to(path, {
+                strokeDashoffset: 0,
+                duration: 1.6,
+                ease: 'power3.inOut'
+            }, revealStart + 0.5 + (i * 0.3));
+        });
+
+        introTl
+            .to(scrollInd, {
+                opacity: 1,
+                duration: 0.6,
+                ease: 'power2.out'
+            }, revealStart + 1.4)
+            .to(navbar, {
+                opacity: 1,
+                y: 0,
+                duration: 0.8,
+                ease: 'power3.out'
+            }, revealStart + 1.2);
+    }
 })();
 
 // ==============================
-// CUSTOM CURSOR
+// CUSTOM CURSOR (Updated for light theme)
 // ==============================
 const cursorDot = document.querySelector('.cursor-dot');
 const cursorOutline = document.querySelector('.cursor-outline');
@@ -214,11 +234,11 @@ window.addEventListener('mousemove', (e) => {
     }, { duration: 500, fill: "forwards" });
 });
 
-const interactables = document.querySelectorAll('a, button, .amenities-list li, .bento-item');
+const interactables = document.querySelectorAll('a, button, .amenities-list li, .bento-item, .diferencial-card, .gallery-item');
 interactables.forEach(el => {
     el.addEventListener('mouseenter', () => {
         cursorOutline.style.transform = 'translate(-50%, -50%) scale(1.5)';
-        cursorOutline.style.backgroundColor = 'rgba(194, 168, 120, 0.1)';
+        cursorOutline.style.backgroundColor = 'rgba(36, 64, 38, 0.08)';
     });
     el.addEventListener('mouseleave', () => {
         cursorOutline.style.transform = 'translate(-50%, -50%) scale(1)';
@@ -227,7 +247,7 @@ interactables.forEach(el => {
 });
 
 // ==============================
-// NAVBAR SCROLL EFFECT
+// NAVBAR SCROLL EFFECT (UNTOUCHED LOGIC)
 // ==============================
 const navbar = document.querySelector('.navbar');
 window.addEventListener('scroll', () => {
@@ -239,43 +259,64 @@ window.addEventListener('scroll', () => {
 });
 
 // ==============================
-// HERO PARALLAX
+// ICEBERG-STYLE SCROLL TRANSITION (UNTOUCHED)
 // ==============================
-gsap.to('.hero-bg', {
-    yPercent: 30,
-    ease: 'none',
-    scrollTrigger: {
-        trigger: '.hero',
-        start: 'top top',
-        end: 'bottom top',
-        scrub: true
-    }
+const curtainContainer = document.getElementById('curtainContainer');
+const curtainSlices = gsap.utils.toArray('.curtain-slice');
+const totalSlices = curtainSlices.length;
+
+// Initially hide the curtain container completely
+gsap.set(curtainContainer, { autoAlpha: 0 });
+
+// Set initial state of all slices
+curtainSlices.forEach((slice, i) => {
+    const isLeftHalf = i < totalSlices / 2;
+    gsap.set(slice, {
+        transformOrigin: isLeftHalf ? 'left center' : 'right center',
+        scaleX: 0
+    });
 });
 
-// ==============================
-// ICEBERG-STYLE SCROLL PINNING
-// ==============================
-
-// 1. We pin the Hero section completely so it stays while you scroll
+// Pin the hero — it stays put while user scrolls
 ScrollTrigger.create({
     trigger: '.hero',
     start: 'top top',
-    end: '+=100%',     // Keeps it pinned for 1 viewport height
+    end: '+=100%',
     pin: true,
-    pinSpacing: false, // False means the next section will scroll OVER it!
+    pinSpacing: false, // Next section scrolls OVER the hero
 });
 
-// 2. As we scroll, we fade the hero overlay to pitch black to mimic a clean curtain effect
-gsap.to('.hero-overlay', {
-    background: 'linear-gradient(to top, rgba(8,18,10,1) 0%, rgba(8,18,10,1) 100%)',
-    opacity: 1,
-    ease: 'none',
+// Scroll timeline: fade hero content + close curtain blinds
+const curtainTl = gsap.timeline({
     scrollTrigger: {
         trigger: '.hero',
         start: 'top top',
         end: '+=100%',
-        scrub: true,
+        scrub: 0.6,
+        onEnter: () => gsap.set(curtainContainer, { autoAlpha: 1 }),
+        onLeaveBack: () => gsap.set(curtainContainer, { autoAlpha: 0 }),
+        onLeave: () => gsap.set(curtainContainer, { autoAlpha: 0 }),
     }
+});
+
+// Step 1: Fade out hero content first
+curtainTl.to('.hero-content', {
+    opacity: 0,
+    duration: 0.3,
+    ease: 'power2.in'
+}, 0);
+
+// Step 2: Close blinds from EDGES → CENTER (staggered)
+curtainSlices.forEach((slice, i) => {
+    const isLeftHalf = i < totalSlices / 2;
+    const distFromEdge = isLeftHalf ? i : (totalSlices - 1 - i);
+    const delay = distFromEdge * 0.05;
+
+    curtainTl.to(slice, {
+        scaleX: 1,
+        duration: 0.6,
+        ease: 'power2.inOut'
+    }, 0.2 + delay);
 });
 
 // ==============================
@@ -296,30 +337,34 @@ revealElements.forEach(el => {
     });
 });
 
-gsap.from('.reveal-left', {
-    x: -50,
-    opacity: 0,
-    duration: 1.2,
-    ease: 'power3.out',
-    scrollTrigger: {
-        trigger: '.contact',
-        start: 'top 80%'
-    }
+gsap.utils.toArray('.reveal-left').forEach(el => {
+    gsap.to(el, {
+        x: 0,
+        opacity: 1,
+        duration: 1.2,
+        ease: 'power3.out',
+        scrollTrigger: {
+            trigger: el,
+            start: 'top 80%'
+        }
+    });
 });
 
-gsap.from('.reveal-right', {
-    x: 50,
-    opacity: 0,
-    duration: 1.2,
-    ease: 'power3.out',
-    scrollTrigger: {
-        trigger: '.contact',
-        start: 'top 80%'
-    }
+gsap.utils.toArray('.reveal-right').forEach(el => {
+    gsap.to(el, {
+        x: 0,
+        opacity: 1,
+        duration: 1.2,
+        ease: 'power3.out',
+        scrollTrigger: {
+            trigger: el,
+            start: 'top 80%'
+        }
+    });
 });
 
 // ==============================
-// AMENITIES INTERACTIVE LIST
+// AMENITIES INTERACTIVE LIST (UNTOUCHED)
 // ==============================
 const listItems = document.querySelectorAll('.amenities-list li');
 const images = document.querySelectorAll('.stack-img');
@@ -332,5 +377,54 @@ listItems.forEach(item => {
         item.classList.add('active');
         const index = item.getAttribute('data-index');
         document.getElementById(`img-${index}`).classList.add('active');
+    });
+});
+
+// ==============================
+// STATS COUNTER ANIMATION
+// ==============================
+const statNumbers = document.querySelectorAll('.stat-number');
+
+statNumbers.forEach(stat => {
+    const target = parseInt(stat.getAttribute('data-target'));
+    if (!target) return;
+
+    ScrollTrigger.create({
+        trigger: stat,
+        start: 'top 85%',
+        once: true,
+        onEnter: () => {
+            gsap.to({ val: 0 }, {
+                val: target,
+                duration: 2,
+                ease: 'power2.out',
+                onUpdate: function() {
+                    const current = Math.round(this.targets()[0].val);
+                    // Preserve the suffix span if it exists
+                    const suffix = stat.querySelector('span');
+                    if (suffix) {
+                        stat.textContent = current;
+                        stat.appendChild(suffix);
+                    } else {
+                        stat.textContent = current;
+                    }
+                }
+            });
+        }
+    });
+});
+
+// ==============================
+// SMOOTH SCROLL for nav links
+// ==============================
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function(e) {
+        const targetId = this.getAttribute('href');
+        if (targetId === '#') return;
+        const targetEl = document.querySelector(targetId);
+        if (targetEl) {
+            e.preventDefault();
+            targetEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
     });
 });
