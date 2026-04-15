@@ -154,15 +154,17 @@ p {
   display: flex;
   align-items: center;
 }
-.logo-handwritten-img {
-  height: 48px;
-  width: auto;
-  filter: brightness(0) invert(1);
+.logo-text {
+  font-family: 'Shadows Into Light', cursive;
+  font-size: 2.5rem;
+  color: var(--text-main);
+  text-decoration: none;
+  line-height: 1;
   opacity: 0.95;
-  transition: opacity 0.3s var(--ease-smooth);
+  transition: opacity 0.3s var(--ease-smooth), font-size 0.3s;
 }
-.navbar.scrolled .logo-handwritten-img {
-  height: 40px;
+.navbar.scrolled .logo-text {
+  font-size: 2rem;
 }
 
 .nav-links {
@@ -212,6 +214,7 @@ p {
   top: 50%; left: 50%;
   transform: translate(-50%, -50%);
   width: 220px; height: 300px;
+  z-index: 2;
 }
 .flash-img {
   position: absolute;
@@ -220,47 +223,50 @@ p {
   object-fit: cover;
   opacity: 0;
   border-radius: 4px;
-  /* NO rotation — photos are straight */
+}
+
+.expand-box {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 10px; height: 10px;
+  background-color: var(--text-main);
+  border-radius: 2px;
+  opacity: 0;
+  z-index: 1;
 }
 
 .expand-frame {
   position: absolute;
   top: 50%; left: 50%;
   transform: translate(-50%, -50%);
-  width: 220px; height: 300px;
+  width: 100%; height: 100%;
   overflow: hidden;
-  border-radius: 4px;
   opacity: 0;
+  z-index: 0;
 }
 .expand-frame video {
   width: 100%; height: 100%;
   object-fit: cover;
 }
 
-/* Scribble SVG Animations */
-.scribble {
-  position: absolute;
-  pointer-events: none;
-  opacity: 0;
-}
-.scribble-1 {
-  top: 15%;
-  right: 10%;
-  width: 200px;
-}
-.scribble-2 {
-  bottom: 20%;
-  left: 8%;
-  width: 150px;
-}
-.scribble-3 {
-  top: 40%;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 120px;
+.scribble-path {
+  stroke-dasharray: 1000;
+  stroke-dashoffset: 1000;
 }
 
-.scribble-path {
+.pen-test-scribble {
+  position: absolute;
+  top: 30%;
+  right: 15%;
+  width: 200px;
+  height: 100px;
+  pointer-events: none;
+  opacity: 0.5;
+  z-index: 5;
+}
+
+.pen-test-path {
   stroke-dasharray: 1000;
   stroke-dashoffset: 1000;
 }
@@ -291,8 +297,25 @@ p {
 }
 
 /* ==============================
-   HERO SECTION
+   CURTAIN TRANSITION & HERO SECTION
    ============================== */
+.curtain-container {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw; height: 100vh;
+  z-index: 8000;
+  display: flex;
+  pointer-events: none;
+}
+
+.curtain-slice {
+  flex: 1;
+  background-color: var(--bg-dark);
+  height: 100%;
+  transform-origin: top;
+  transform: scaleY(0); /* starts invisible to not block intro */
+}
+
 .hero {
   position: relative;
   height: 100vh;

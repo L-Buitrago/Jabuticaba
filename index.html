@@ -27,7 +27,7 @@
     <nav class="navbar" id="mainNav">
         <div class="nav-container">
             <div class="logo">
-                <img src="logo-manuscrita.png" alt="Jabuticabas" class="logo-handwritten-img">
+                <div class="logo-text" id="logoText">JABUTICABAS</div>
             </div>
             <ul class="nav-links">
                 <li><a href="#conceito">Conceito</a></li>
@@ -50,8 +50,16 @@
 
         <!-- Random scribbles removed as per Iceberg style -->
 
-        <!-- Expanding frame that reveals video -->
+        <!-- The expanding square that turns into the video space -->
+        <div class="expand-box" id="expandBox"></div>
         <div class="expand-frame" id="expandFrame"></div>
+    </div>
+
+    <!-- Curtain Transition Grid -->
+    <div class="curtain-container" id="curtainContainer">
+        <div class="curtain-slice"></div><div class="curtain-slice"></div><div class="curtain-slice"></div>
+        <div class="curtain-slice"></div><div class="curtain-slice"></div><div class="curtain-slice"></div>
+        <div class="curtain-slice"></div><div class="curtain-slice"></div>
     </div>
 
     <!-- Hero Section -->
@@ -64,23 +72,30 @@
         </div>
 
         <div class="hero-content">
-            <!-- Handwritten reveal text (Iceberg Style) -->
+            <h1 class="hero-title-giant" id="heroTitleGiant">JABUTICABAS</h1>
+            
             <div class="hero-phrase" id="heroHandwritten">
-                <div class="phrase-line">Onde a <span class="phrase-highlight">natureza
-                    <svg class="scribble-circle" viewBox="0 0 160 60" xmlns="http://www.w3.org/2000/svg">
-                        <path class="scribble-path circ-path" d="M 20,30 C 20,5 140,5 140,30 C 140,55 20,55 20,30 C 20,25 30,20 40,20" fill="none" stroke="rgba(251,249,244,0.9)" stroke-width="1.5" stroke-linecap="round"/>
-                    </svg>
-                </span></div>
-                <div class="phrase-line">encontra o</div>
-                <div class="phrase-line"><span class="phrase-underline">privilégio
-                    <svg class="scribble-underline" viewBox="0 0 160 20" xmlns="http://www.w3.org/2000/svg">
-                        <path class="scribble-path under-path" d="M 10,10 Q 80,18 150,5" fill="none" stroke="rgba(251,249,244,0.9)" stroke-width="1.5" stroke-linecap="round"/>
-                    </svg>
-                </span></div>
+                <div class="phrase-line">
+                    Onde a <span class="phrase-highlight">natureza
+                        <svg class="scribble-circle" viewBox="0 0 160 60" xmlns="http://www.w3.org/2000/svg">
+                            <path class="scribble-path circ-path" d="M 20,30 C 20,5 140,5 140,30 C 140,55 20,55 20,30 C 20,25 30,20 40,20" fill="none" stroke="rgba(251,249,244,0.9)" stroke-width="1.5" stroke-linecap="round"/>
+                        </svg>
+                    </span>
+                </div>
+                <div class="phrase-line">
+                    encontra o <span class="phrase-underline">privilégio
+                        <svg class="scribble-underline" viewBox="0 0 160 20" xmlns="http://www.w3.org/2000/svg">
+                            <path class="scribble-path under-path" d="M 10,10 Q 80,18 150,5" fill="none" stroke="rgba(251,249,244,0.9)" stroke-width="1.5" stroke-linecap="round"/>
+                        </svg>
+                    </span>
+                </div>
             </div>
 
-            <h1 class="hero-title-giant" id="heroTitleGiant">JABUTICABA</h1>
-            <p class="hero-tagline" id="heroTagline">Residencial de Alto Padrão</p>
+            <!-- Pen Test Scribble -->
+            <svg class="pen-test-scribble" viewBox="0 0 200 100" xmlns="http://www.w3.org/2000/svg">
+                <path class="pen-test-path" id="penTestPath" d="M10,50 L25,10 L35,80 L50,20 L65,70 L80,30 L95,60 M120,40 Q130,10 140,50 T160,50 T180,50" fill="none" stroke="rgba(251,249,244,0.7)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+
             <div class="scroll-indicator" id="scrollIndicator">
                 <span>Descubra</span>
                 <div class="mouse"><div class="wheel"></div></div>
