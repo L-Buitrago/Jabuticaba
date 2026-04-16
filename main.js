@@ -73,13 +73,23 @@ function enableLoop() {
     // Lock scroll during intro
     document.body.style.overflow = 'hidden';
 
-    // Calculate stroke lengths for scribble animation
-    const scribblePaths = document.querySelectorAll('.scribble-path, .pen-test-path');
-    scribblePaths.forEach(path => {
-        const length = path.getTotalLength ? path.getTotalLength() : 1000;
-        path.style.strokeDasharray = length;
-        path.style.strokeDashoffset = length;
-    });
+    // Text Splitting for smooth reveal
+    const splitText = (el) => {
+        if (!el) return;
+        const text = el.textContent.trim();
+        el.textContent = '';
+        text.split('').forEach(char => {
+            const span = document.createElement('span');
+            span.textContent = char === ' ' ? '\u00A0' : char;
+            span.style.display = 'inline-block';
+            span.style.opacity = '0';
+            span.style.transform = 'translateY(10px)';
+            el.appendChild(span);
+        });
+    };
+
+    const phraseLines = document.querySelectorAll('.phrase-line');
+    phraseLines.forEach(line => splitText(line));
 
     // Wait for intro video to be ready, THEN start
     introVideoReady.then(() => {
@@ -187,18 +197,27 @@ function enableLoop() {
                 ease: 'power3.out'
             }, revealStart + 0.3);
 
-        // Draw scribbles
-        const phraseScribbles = document.querySelectorAll('.scribble-path, .pen-test-path');
-        phraseScribbles.forEach((path, i) => {
-            const length = path.getTotalLength ? path.getTotalLength() : 1000;
-            path.style.strokeDasharray = length;
-            path.style.strokeDashoffset = length;
-            introTl.to(path, {
+        // Character reveal animation
+        const characters = document.querySelectorAll('.phrase-line span');
+        introTl.to(characters, {
+            opacity: 1,
+            y: 0,
+            duration: 0.8,
+            stagger: 0.02,
+            ease: 'power2.out'
+        }, revealStart + 0.5);
+
+        // Only pen test scribble remains
+        const penTest = document.querySelector('.pen-test-path');
+        if (penTest) {
+            const length = penTest.getTotalLength ? penTest.getTotalLength() : 1000;
+            gsap.set(penTest, { strokeDasharray: length, strokeDashoffset: length });
+            introTl.to(penTest, {
                 strokeDashoffset: 0,
                 duration: 1.6,
                 ease: 'power3.inOut'
-            }, revealStart + 0.5 + (i * 0.3));
-        });
+            }, revealStart + 1.2);
+        }
 
         introTl
             .to(scrollInd, {

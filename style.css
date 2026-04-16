@@ -358,30 +358,7 @@ p {
   stroke-dashoffset: 1000;
 }
 
-/* Iceberg Style Phrase Scribbles */
-.phrase-highlight, .phrase-underline {
-  position: relative;
-  display: inline-block;
-}
-.scribble-circle {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 140%;
-  height: 160%;
-  pointer-events: none;
-  z-index: 0;
-}
-.scribble-underline {
-  position: absolute;
-  bottom: -4px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 110%;
-  height: 20px;
-  pointer-events: none;
-}
+/* Removed Scribbles for a cleaner look */
 
 /* =====================================================
    CURTAIN TRANSITION — PRESERVED (DARK BLINDS)
@@ -434,21 +411,23 @@ p {
   align-items: center;
 }
 
-/* Handwritten Reveal Text */
+/* Formal Signature Reveal Text */
 .hero-phrase {
-  font-family: var(--font-handwritten);
-  font-size: clamp(1.4rem, 2.5vw, 2.2rem);
+  font-family: var(--font-serif);
+  font-size: clamp(1.8rem, 3vw, 2.8rem);
   font-weight: 400;
-  color: rgba(251, 249, 244, 0.9);
-  letter-spacing: 2px;
-  margin-bottom: 32px;
+  font-style: italic;
+  color: rgba(251, 249, 244, 0.95);
+  letter-spacing: 0.05em;
+  margin-bottom: 40px;
   opacity: 0;
-  transform: translateY(15px);
+  transform: translateY(20px);
   text-align: center;
-  line-height: 1.4;
+  line-height: 1.2;
 }
 .phrase-line {
   display: block;
+  overflow: hidden; /* For line-by-line reveal if needed */
 }
 
 .hero-title-giant {
