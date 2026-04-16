@@ -271,23 +271,8 @@ window.addEventListener('scroll', () => {
 });
 
 // ==============================
-// ICEBERG-STYLE SCROLL TRANSITION (UNTOUCHED)
+// ICEBERG-STYLE SCROLL PARALLAX
 // ==============================
-const curtainContainer = document.getElementById('curtainContainer');
-const curtainSlices = gsap.utils.toArray('.curtain-slice');
-const totalSlices = curtainSlices.length;
-
-// Initially hide the curtain container completely
-gsap.set(curtainContainer, { autoAlpha: 0 });
-
-// Set initial state of all slices
-curtainSlices.forEach((slice, i) => {
-    const isLeftHalf = i < totalSlices / 2;
-    gsap.set(slice, {
-        transformOrigin: isLeftHalf ? 'left center' : 'right center',
-        scaleX: 0
-    });
-});
 
 // Pin the hero — it stays put while user scrolls
 ScrollTrigger.create({
@@ -295,41 +280,82 @@ ScrollTrigger.create({
     start: 'top top',
     end: '+=100%',
     pin: true,
-    pinSpacing: false, // Next section scrolls OVER the hero
+    pinSpacing: false, // Next section scrolls OVER the hero smoothly
 });
 
-// Scroll timeline: fade hero content + close curtain blinds
-const curtainTl = gsap.timeline({
+// Scroll timeline: Parallax hero content up and fade out
+const heroScrollTl = gsap.timeline({
     scrollTrigger: {
         trigger: '.hero',
         start: 'top top',
         end: '+=100%',
-        scrub: 0.6,
-        onEnter: () => gsap.set(curtainContainer, { autoAlpha: 1 }),
-        onLeaveBack: () => gsap.set(curtainContainer, { autoAlpha: 0 }),
-        onLeave: () => gsap.set(curtainContainer, { autoAlpha: 0 }),
+        scrub: true
     }
 });
 
-// Step 1: Fade out hero content first
-curtainTl.to('.hero-content', {
+heroScrollTl.to('.hero-content', {
+    y: -150,
     opacity: 0,
-    duration: 0.3,
-    ease: 'power2.in'
-}, 0);
-
-// Step 2: Close blinds from EDGES → CENTER (staggered)
-curtainSlices.forEach((slice, i) => {
-    const isLeftHalf = i < totalSlices / 2;
-    const distFromEdge = isLeftHalf ? i : (totalSlices - 1 - i);
-    const delay = distFromEdge * 0.05;
-
-    curtainTl.to(slice, {
-        scaleX: 1,
-        duration: 0.6,
-        ease: 'power2.inOut'
-    }, 0.2 + delay);
+    ease: 'none'
 });
+
+// ==============================
+// ICEBERG-STYLE AMBIENT SCRIBBLES
+// ==============================
+function initAmbientScribbles() {
+    const ambientPaths = gsap.utils.toArray('.ambient-path');
+    if (!ambientPaths.length) return;
+
+    // Set all to hidden initially
+    ambientPaths.forEach(path => {
+        const length = path.getTotalLength ? path.getTotalLength() : 2000;
+        gsap.set(path, { strokeDasharray: length, strokeDashoffset: length });
+        // Store length on the element for easy access
+        path.dataset.length = length;
+    });
+
+    // Infinite loop function to randomly animate them
+    function playRandomScribble() {
+        // Pick a random path
+        const randomPath = ambientPaths[Math.floor(Math.random() * ambientPaths.length)];
+        const length = randomPath.dataset.length;
+
+        // Draw it, hold it briefy, erase it
+        const tl = gsap.timeline({
+            onComplete: playRandomScribble // Loop
+        });
+
+        tl.to(randomPath, {
+            strokeDashoffset: 0,
+            duration: gsap.utils.random(2, 4),
+            ease: 'power2.inOut'
+        })
+        .to(randomPath, {
+            strokeDashoffset: -length, // Erase it by moving offset forward
+            duration: gsap.utils.random(1.5, 3),
+            ease: 'power2.inOut',
+            delay: gsap.utils.random(0.5, 2)
+        })
+        // Reset offset back to positive length invisibly so it can loop again later
+        .set(randomPath, {
+            strokeDashoffset: length
+        });
+    }
+
+    // Start with a slight delay so intro can happen
+    setTimeout(() => {
+        playRandomScribble();
+        // Maybe start a second one so they overlap
+        if (ambientPaths.length > 1) {
+            setTimeout(playRandomScribble, 2500);
+        }
+    }, 4000);
+}
+
+// Start ambient scribbles
+initAmbientScribbles();
+
+
 
 // ==============================
 // SCROLL REVEALS
