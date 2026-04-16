@@ -206,17 +206,6 @@ function enableLoop() {
             ease: 'power2.out'
         }, revealStart + 0.5);
 
-        // Only pen test scribble remains
-        const penTest = document.querySelector('.pen-test-path');
-        if (penTest) {
-            const length = penTest.getTotalLength ? penTest.getTotalLength() : 1000;
-            gsap.set(penTest, { strokeDasharray: length, strokeDashoffset: length });
-            introTl.to(penTest, {
-                strokeDashoffset: 0,
-                duration: 1.6,
-                ease: 'power3.inOut'
-            }, revealStart + 1.2);
-        }
 
         introTl.to(navbar, {
             opacity: 1,
@@ -299,61 +288,6 @@ heroScrollTl.to('.hero-content', {
     ease: 'none'
 });
 
-// ==============================
-// ICEBERG-STYLE AMBIENT SCRIBBLES
-// ==============================
-function initAmbientScribbles() {
-    const ambientPaths = gsap.utils.toArray('.ambient-path');
-    if (!ambientPaths.length) return;
-
-    // Set all to hidden initially
-    ambientPaths.forEach(path => {
-        const length = path.getTotalLength ? path.getTotalLength() : 2000;
-        gsap.set(path, { strokeDasharray: length, strokeDashoffset: length });
-        // Store length on the element for easy access
-        path.dataset.length = length;
-    });
-
-    // Infinite loop function to randomly animate them
-    function playRandomScribble() {
-        // Pick a random path
-        const randomPath = ambientPaths[Math.floor(Math.random() * ambientPaths.length)];
-        const length = randomPath.dataset.length;
-
-        // Draw it, hold it briefy, erase it
-        const tl = gsap.timeline({
-            onComplete: playRandomScribble // Loop
-        });
-
-        tl.to(randomPath, {
-            strokeDashoffset: 0,
-            duration: gsap.utils.random(2, 4),
-            ease: 'power2.inOut'
-        })
-        .to(randomPath, {
-            strokeDashoffset: -length, // Erase it by moving offset forward
-            duration: gsap.utils.random(1.5, 3),
-            ease: 'power2.inOut',
-            delay: gsap.utils.random(0.5, 2)
-        })
-        // Reset offset back to positive length invisibly so it can loop again later
-        .set(randomPath, {
-            strokeDashoffset: length
-        });
-    }
-
-    // Start with a slight delay so intro can happen
-    setTimeout(() => {
-        playRandomScribble();
-        // Maybe start a second one so they overlap
-        if (ambientPaths.length > 1) {
-            setTimeout(playRandomScribble, 2500);
-        }
-    }, 4000);
-}
-
-// Start ambient scribbles
-initAmbientScribbles();
 
 
 
