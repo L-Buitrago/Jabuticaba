@@ -64,7 +64,6 @@ function enableLoop() {
     const flashContainer = document.getElementById('flashPhotos');
     const heroTitle = document.getElementById('heroTitleGiant');
     const heroHandwritten = document.getElementById('heroHandwritten');
-    const scrollInd = document.getElementById('scrollIndicator');
     const navbar = document.querySelector('.navbar');
 
     // Hide navbar during intro
@@ -219,18 +218,12 @@ function enableLoop() {
             }, revealStart + 1.2);
         }
 
-        introTl
-            .to(scrollInd, {
-                opacity: 1,
-                duration: 0.6,
-                ease: 'power2.out'
-            }, revealStart + 1.4)
-            .to(navbar, {
-                opacity: 1,
-                y: 0,
-                duration: 0.8,
-                ease: 'power3.out'
-            }, revealStart + 1.2);
+        introTl.to(navbar, {
+            opacity: 1,
+            y: 0,
+            duration: 0.8,
+            ease: 'power3.out'
+        }, revealStart + 1.2);
     }
 })();
 
