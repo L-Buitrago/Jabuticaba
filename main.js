@@ -235,7 +235,7 @@ window.addEventListener('mousemove', (e) => {
     }, { duration: 500, fill: "forwards" });
 });
 
-const interactables = document.querySelectorAll('a, button, .amenities-list li, .bento-item, .diferencial-card, .gallery-item');
+const interactables = document.querySelectorAll('a, button, .amenities-list li, .bento-item, .diferencial-card, .photo-item');
 interactables.forEach(el => {
     el.addEventListener('mouseenter', () => {
         cursorOutline.style.transform = 'translate(-50%, -50%) scale(1.5)';
@@ -246,6 +246,44 @@ interactables.forEach(el => {
         cursorOutline.style.backgroundColor = 'transparent';
     });
 });
+
+// ==============================
+// SIMPLE LIGHTBOX (Home Page)
+// ==============================
+(function () {
+  const lightbox = document.createElement('div');
+  lightbox.className = 'gallery-lightbox';
+  lightbox.innerHTML = `
+    <button class="lightbox-close" aria-label="Fechar">×</button>
+    <img src="" alt="Galeria">
+  `;
+  document.body.appendChild(lightbox);
+
+  const lightboxImg = lightbox.querySelector('img');
+  const closeBtn = lightbox.querySelector('.lightbox-close');
+
+  document.querySelectorAll('.photo-item').forEach((item) => {
+    item.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const img = item.querySelector('img');
+      if (img) {
+        lightboxImg.src = img.src;
+        lightboxImg.alt = img.alt;
+        lightbox.classList.add('active');
+        document.body.style.overflow = 'hidden';
+      }
+    });
+  });
+
+  const closeLightbox = () => {
+    lightbox.classList.remove('active');
+    document.body.style.overflow = '';
+  };
+
+  closeBtn.addEventListener('click', closeLightbox);
+  lightbox.addEventListener('click', (e) => { if (e.target === lightbox) closeLightbox(); });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeLightbox(); });
+})();
 
 // ==============================
 // NAVBAR SCROLL EFFECT (UNTOUCHED LOGIC)

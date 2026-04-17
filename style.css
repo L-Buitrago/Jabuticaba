@@ -788,59 +788,71 @@ p {
   position: relative;
   z-index: 8500;
 }
-.gallery-grid {
+
+.photo-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-template-rows: auto;
-  gap: 16px;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 24px;
 }
-.gallery-item {
+
+.photo-item {
+  position: relative;
   border-radius: var(--radius-md);
   overflow: hidden;
-  position: relative;
-  cursor: pointer;
   aspect-ratio: 4/3;
+  cursor: zoom-in;
   background: var(--green-50);
-  border: 2px dashed var(--green-200);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.4s var(--ease-smooth), box-shadow 0.4s var(--ease-smooth);
 }
-.gallery-item.has-image {
-  border: none;
-  background: var(--green-50);
-}
-.gallery-item img {
+
+.photo-item img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   transition: transform 0.6s var(--ease-smooth);
 }
-.gallery-item:hover img {
+
+.photo-item:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+}
+
+.photo-item:hover img {
   transform: scale(1.08);
 }
-.gallery-item.tall {
-  grid-row: span 2;
-  aspect-ratio: auto;
-}
-.gallery-item .gallery-overlay {
+
+.photo-overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(to top, rgba(15,32,18,0.6), transparent 60%);
-  opacity: 0;
-  transition: opacity 0.4s;
+  background: rgba(15, 32, 18, 0.4);
   display: flex;
-  align-items: flex-end;
-  padding: 24px;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s;
 }
-.gallery-item:hover .gallery-overlay {
+
+.photo-item:hover .photo-overlay {
   opacity: 1;
 }
-.gallery-overlay span {
+
+.photo-overlay span {
   color: #fff;
-  font-size: 0.9rem;
   font-weight: 500;
-  letter-spacing: 1px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  border: 1px solid rgba(255,255,255,0.5);
+  padding: 8px 16px;
+  border-radius: 4px;
+}
+
+/* Especial para a Home: 4 fotos */
+@media (min-width: 768px) {
+  .photo-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
 }
 
 /* ==============================
