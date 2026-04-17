@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Galeria | Residencial Jabuticabas</title>
+    <meta name="description" content="Galeria de imagens do Residencial Jabuticabas — Condomínio de alto padrão entre Curvelo e Inimutaba, MG.">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Shadows+Into+Light&family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Base site styles (shared tokens) -->
+    <link rel="stylesheet" href="style.css">
+    <!-- Gallery-specific styles -->
+    <link rel="stylesheet" href="galeria.css">
+
+    <!-- Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="galeria-page">
+
+    <!-- Navigation -->
+    <nav class="navbar galeria-nav scrolled" id="mainNav">
+        <div class="nav-container">
+            <div class="logo">
+                <a href="index.html" class="logo-text" id="logoText">JABUTICABAS</a>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html#conceito">Conceito</a></li>
+                <li><a href="index.html#lazer">Lazer</a></li>
+                <li><a href="index.html#implantacao">Implantação</a></li>
+                <li><a href="#" class="active-link">Galeria</a></li>
+                <li><a href="index.html#localizacao">Localização</a></li>
+                <li><a href="index.html#contato">Contato</a></li>
+            </ul>
+            <a href="index.html#contato" class="btn btn-outline">Agendar Visita</a>
+            <button class="mobile-menu-toggle" id="mobileToggle" aria-label="Menu">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- =============================================
+         GALLERY HERO
+         ============================================= -->
+    <section class="gallery-hero" id="galleryHero">
+        <div class="gallery-hero-bg">
+            <img src="https://residencialjabuticabas.com.br/wp-content/uploads/2021/06/WhatsApp-Image-2021-06-17-at-17.19.19-1.jpeg" alt="Vista aérea do condomínio">
+            <div class="gallery-hero-overlay"></div>
+        </div>
+        <div class="gallery-hero-content">
+            <p class="subtitle">GALERIA</p>
+            <h1>Cada ângulo,<br>uma nova emoção.</h1>
+            <p class="gallery-hero-desc">Role para explorar o Residencial Jabuticabas como você nunca viu.</p>
+            <div class="scroll-cue">
+                <div class="scroll-cue-line"></div>
+                <span>Scroll</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- =============================================
+         HORIZONTAL CINEMATIC SCROLL
+         ============================================= -->
+    <section class="gallery-horizontal-wrap" id="galleryWrap">
+        <div class="gallery-horizontal-track" id="galleryTrack">
+
+            <!-- Panel 1 -->
+            <div class="gallery-panel" data-caption="Vista Panorâmica">
+                <div class="panel-img-wrap">
+                    <img src="https://residencialjabuticabas.com.br/wp-content/uploads/2021/06/WhatsApp-Image-2021-06-17-at-17.19.19-1.jpeg" alt="Vista Panorâmica">
+                </div>
+                <div class="panel-caption">
+                    <span class="panel-number">01</span>
+                    <h3>Vista Panorâmica</h3>
+                    <p>O condomínio visto de cima — onde o verde do cerrado encontra a exclusividade.</p>
+                </div>
+            </div>
+
+            <!-- Panel 2 -->
+            <div class="gallery-panel" data-caption="Áreas Comuns">
+                <div class="panel-img-wrap">
+                    <img src="https://residencialjabuticabas.com.br/wp-content/uploads/2021/06/WhatsApp-Image-2021-06-17-at-17.19.20.jpeg" alt="Áreas Comuns">
+                </div>
+                <div class="panel-caption">
+                    <span class="panel-number">02</span>
+                    <h3>Áreas Comuns</h3>
+                    <p>Espaços projetados para convivência, com acabamento de alto padrão.</p>
+                </div>
+            </div>
+
+            <!-- Panel 3 -->
+            <div class="gallery-panel" data-caption="Natureza Preservada">
+                <div class="panel-img-wrap">
+                    <img src="https://residencialjabuticabas.com.br/wp-content/uploads/2021/06/WhatsApp-Image-2021-06-17-at-17.19.20-1.jpeg" alt="Natureza Preservada">
+                </div>
+                <div class="panel-caption">
+                    <span class="panel-number">03</span>
+                    <h3>Natureza Preservada</h3>
+                    <p>Milhares de metros quadrados de vegetação nativa preservada para sua família.</p>
+                </div>
+            </div>
+
+            <!-- Panel 4 -->
+            <div class="gallery-panel" data-caption="Infraestrutura">
+                <div class="panel-img-wrap">
+                    <img src="https://residencialjabuticabas.com.br/wp-content/uploads/2021/06/WhatsApp-Image-2021-06-17-at-17.19.20-2.jpeg" alt="Infraestrutura">
+                </div>
+                <div class="panel-caption">
+                    <span class="panel-number">04</span>
+                    <h3>Infraestrutura</h3>
+                    <p>Ruas pavimentadas, iluminação LED e rede completa de água e esgoto.</p>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- =============================================
+         GALLERY PROGRESS BAR (fixed during scroll)
+         ============================================= -->
+    <div class="gallery-progress" id="galleryProgress">
+        <div class="gallery-progress-bar" id="galleryProgressBar"></div>
+        <div class="gallery-counter">
+            <span id="galleryCurrentSlide">01</span>
+            <span class="gallery-counter-sep">/</span>
+            <span id="galleryTotalSlides">04</span>
+        </div>
+    </div>
+
+    <!-- =============================================
+         CLOSING CTA
+         ============================================= -->
+    <section class="gallery-cta">
+        <div class="container">
+            <div class="gallery-cta-inner">
+                <h2>Quer ver de perto?</h2>
+                <p>Agende uma visita privativa e conheça cada detalhe do Residencial Jabuticabas pessoalmente.</p>
+                <div class="gallery-cta-btns">
+                    <a href="index.html#contato" class="btn btn-primary">Agendar Visita</a>
+                    <a href="index.html" class="btn btn-outline btn-outline-dark">Voltar ao Início</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer (simplified) -->
+    <footer>
+        <div class="container">
+            <div class="footer-bottom" style="border:none; padding-top:0;">
+                <p>&copy; 2026 CCA Imóveis — Residencial Jabuticabas. Todos os direitos reservados.</p>
+                <div class="socials">
+                    <a href="#" aria-label="Instagram"><i data-lucide="instagram"></i></a>
+                    <a href="#" aria-label="Facebook"><i data-lucide="facebook"></i></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- WhatsApp Floating Button -->
+    <a href="https://wa.me/553837216440" target="_blank" class="whatsapp-float" aria-label="WhatsApp">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+        </svg>
+    </a>
+
+    <!-- GSAP & Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="galeria.js"></script>
+    <script>
+      lucide.createIcons();
+    </script>
+</body>
+</html>
