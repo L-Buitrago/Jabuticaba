@@ -4,22 +4,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Galeria | Residencial Jabuticabas</title>
-    <meta name="description" content="Galeria de imagens do Residencial Jabuticabas — Condomínio de alto padrão entre Curvelo e Inimutaba, MG.">
+    <meta name="description" content="Navegue pela galeria de imagens do Residencial Jabuticabas.">
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Shadows+Into+Light&family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
-    <!-- Base site styles (shared tokens) -->
+    <!-- Styles -->
     <link rel="stylesheet" href="style.css">
-    <!-- Gallery-specific styles -->
     <link rel="stylesheet" href="galeria.css">
 
     <!-- Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body class="galeria-page">
+
+    <div class="cursor-dot"></div>
+    <div class="cursor-outline"></div>
 
     <!-- Navigation -->
     <nav class="navbar galeria-nav scrolled" id="mainNav">
@@ -42,111 +44,79 @@
         </div>
     </nav>
 
-    <!-- =============================================
-         GALLERY HERO
-         ============================================= -->
-    <section class="gallery-hero" id="galleryHero">
-        <div class="gallery-hero-bg">
-            <img src="https://residencialjabuticabas.com.br/wp-content/uploads/2021/06/WhatsApp-Image-2021-06-17-at-17.19.19-1.jpeg" alt="Vista aérea do condomínio">
-            <div class="gallery-hero-overlay"></div>
-        </div>
-        <div class="gallery-hero-content">
+    <!-- Header Simples -->
+    <section class="gallery-header">
+        <div class="container center">
             <p class="subtitle">GALERIA</p>
-            <h1>Cada ângulo,<br>uma nova emoção.</h1>
-            <p class="gallery-hero-desc">Role para explorar o Residencial Jabuticabas como você nunca viu.</p>
-            <div class="scroll-cue">
-                <div class="scroll-cue-line"></div>
-                <span>Scroll</span>
-            </div>
+            <h1>O nosso privilégio em imagens.</h1>
+            <p>Um pequeno vislumbre do que significa viver no Residencial Jabuticabas.</p>
         </div>
     </section>
 
-    <!-- =============================================
-         HORIZONTAL CINEMATIC SCROLL
-         ============================================= -->
-    <section class="gallery-horizontal-wrap" id="galleryWrap">
-        <div class="gallery-horizontal-track" id="galleryTrack">
-
-            <!-- Panel 1 -->
-            <div class="gallery-panel" data-caption="Vista Panorâmica">
-                <div class="panel-img-wrap">
-                    <img src="https://residencialjabuticabas.com.br/wp-content/uploads/2021/06/WhatsApp-Image-2021-06-17-at-17.19.19-1.jpeg" alt="Vista Panorâmica">
-                </div>
-                <div class="panel-caption">
-                    <span class="panel-number">01</span>
-                    <h3>Vista Panorâmica</h3>
-                    <p>O condomínio visto de cima — onde o verde do cerrado encontra a exclusividade.</p>
-                </div>
-            </div>
-
-            <!-- Panel 2 -->
-            <div class="gallery-panel" data-caption="Áreas Comuns">
-                <div class="panel-img-wrap">
-                    <img src="https://residencialjabuticabas.com.br/wp-content/uploads/2021/06/WhatsApp-Image-2021-06-17-at-17.19.20.jpeg" alt="Áreas Comuns">
-                </div>
-                <div class="panel-caption">
-                    <span class="panel-number">02</span>
-                    <h3>Áreas Comuns</h3>
-                    <p>Espaços projetados para convivência, com acabamento de alto padrão.</p>
-                </div>
-            </div>
-
-            <!-- Panel 3 -->
-            <div class="gallery-panel" data-caption="Natureza Preservada">
-                <div class="panel-img-wrap">
-                    <img src="https://residencialjabuticabas.com.br/wp-content/uploads/2021/06/WhatsApp-Image-2021-06-17-at-17.19.20-1.jpeg" alt="Natureza Preservada">
-                </div>
-                <div class="panel-caption">
-                    <span class="panel-number">03</span>
-                    <h3>Natureza Preservada</h3>
-                    <p>Milhares de metros quadrados de vegetação nativa preservada para sua família.</p>
-                </div>
-            </div>
-
-            <!-- Panel 4 -->
-            <div class="gallery-panel" data-caption="Infraestrutura">
-                <div class="panel-img-wrap">
-                    <img src="https://residencialjabuticabas.com.br/wp-content/uploads/2021/06/WhatsApp-Image-2021-06-17-at-17.19.20-2.jpeg" alt="Infraestrutura">
-                </div>
-                <div class="panel-caption">
-                    <span class="panel-number">04</span>
-                    <h3>Infraestrutura</h3>
-                    <p>Ruas pavimentadas, iluminação LED e rede completa de água e esgoto.</p>
-                </div>
-            </div>
-
-        </div>
-    </section>
-
-    <!-- =============================================
-         GALLERY PROGRESS BAR (fixed during scroll)
-         ============================================= -->
-    <div class="gallery-progress" id="galleryProgress">
-        <div class="gallery-progress-bar" id="galleryProgressBar"></div>
-        <div class="gallery-counter">
-            <span id="galleryCurrentSlide">01</span>
-            <span class="gallery-counter-sep">/</span>
-            <span id="galleryTotalSlides">04</span>
-        </div>
-    </div>
-
-    <!-- =============================================
-         CLOSING CTA
-         ============================================= -->
-    <section class="gallery-cta">
+    <!-- Grid de Galeria Simples e Bonita -->
+    <section class="gallery-simple-grid">
         <div class="container">
-            <div class="gallery-cta-inner">
-                <h2>Quer ver de perto?</h2>
-                <p>Agende uma visita privativa e conheça cada detalhe do Residencial Jabuticabas pessoalmente.</p>
-                <div class="gallery-cta-btns">
-                    <a href="index.html#contato" class="btn btn-primary">Agendar Visita</a>
-                    <a href="index.html" class="btn btn-outline btn-outline-dark">Voltar ao Início</a>
+            <div class="photo-grid">
+                
+                <!-- Foto 1 -->
+                <div class="photo-item reveal-up">
+                    <img src="https://residencialjabuticabas.com.br/wp-content/uploads/2021/06/WhatsApp-Image-2021-06-17-at-17.19.19-1.jpeg" alt="Vista do Condomínio">
+                    <div class="photo-overlay">
+                        <span>Ampliar Imagem</span>
+                    </div>
                 </div>
+
+                <!-- Foto 2 -->
+                <div class="photo-item reveal-up" style="transition-delay: 0.1s;">
+                    <img src="https://residencialjabuticabas.com.br/wp-content/uploads/2021/06/WhatsApp-Image-2021-06-17-at-17.19.20.jpeg" alt="Áreas Verdes">
+                    <div class="photo-overlay">
+                        <span>Ampliar Imagem</span>
+                    </div>
+                </div>
+
+                <!-- Foto 3 -->
+                <div class="photo-item reveal-up" style="transition-delay: 0.2s;">
+                    <img src="https://residencialjabuticabas.com.br/wp-content/uploads/2021/06/WhatsApp-Image-2021-06-17-at-17.19.20-1.jpeg" alt="Infraestrutura">
+                    <div class="photo-overlay">
+                        <span>Ampliar Imagem</span>
+                    </div>
+                </div>
+
+                <!-- Foto 4 -->
+                <div class="photo-item reveal-up" style="transition-delay: 0.3s;">
+                    <img src="https://residencialjabuticabas.com.br/wp-content/uploads/2021/06/WhatsApp-Image-2021-06-17-at-17.19.20-2.jpeg" alt="Lago e Natureza">
+                    <div class="photo-overlay">
+                        <span>Ampliar Imagem</span>
+                    </div>
+                </div>
+
+                <!-- Exemplo para adicionar mais fotos (basta copiar este bloco) -->
+                <!--
+                <div class="photo-item reveal-up">
+                    <img src="nome-da-sua-foto.jpg" alt="Descrição da Foto">
+                    <div class="photo-overlay">
+                        <span>Ampliar Imagem</span>
+                    </div>
+                </div>
+                -->
+
             </div>
         </div>
     </section>
 
-    <!-- Footer (simplified) -->
+    <!-- Closing CTA -->
+    <section class="gallery-cta">
+        <div class="container center">
+            <h2>Gostou do que viu?</h2>
+            <p style="margin-bottom: 32px; color: var(--text-body);">Nada se compara a ver de perto. Agende uma visita.</p>
+            <div style="display:flex; gap: 16px; justify-content: center; flex-wrap: wrap;">
+                <a href="index.html#contato" class="btn btn-primary">Agendar Visita</a>
+                <a href="index.html" class="btn btn-outline" style="border-color: var(--green-700); color: var(--green-700);">Voltar ao Início</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
     <footer>
         <div class="container">
             <div class="footer-bottom" style="border:none; padding-top:0;">
@@ -158,8 +128,6 @@
             </div>
         </div>
     </footer>
-
-    <!-- GSAP & Scripts -->
 
     <!-- GSAP & Scripts -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
