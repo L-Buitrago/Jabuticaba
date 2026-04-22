@@ -438,3 +438,49 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         }
     });
 });
+
+// ==============================
+// MOBILE MENU
+// ==============================
+const mobileToggle = document.getElementById('mobileToggle');
+const mobileMenu = document.getElementById('mobileMenu');
+
+if (mobileToggle && mobileMenu) {
+    mobileToggle.addEventListener('click', () => {
+        const isActive = mobileMenu.classList.toggle('active');
+        mobileToggle.classList.toggle('active');
+        document.body.style.overflow = isActive ? 'hidden' : '';
+    });
+
+    // Close menu when clicking a link
+    mobileMenu.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', () => {
+            mobileMenu.classList.remove('active');
+            mobileToggle.classList.remove('active');
+            document.body.style.overflow = '';
+        });
+    });
+}
+
+// ==============================
+// WHATSAPP BUTTON VISIBILITY
+// ==============================
+const whatsappBtn = document.getElementById('whatsappBtn');
+
+if (whatsappBtn) {
+    // Show after scrolling past hero
+    ScrollTrigger.create({
+        trigger: '.hero',
+        start: 'bottom top',
+        onEnter: () => whatsappBtn.classList.add('visible'),
+        onLeaveBack: () => whatsappBtn.classList.remove('visible')
+    });
+
+    // Also show after 4 seconds as fallback
+    setTimeout(() => {
+        if (window.scrollY > 300) {
+            whatsappBtn.classList.add('visible');
+        }
+    }, 4000);
+}
+
