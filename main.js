@@ -251,6 +251,9 @@ interactables.forEach(el => {
 // SIMPLE LIGHTBOX (Home Page)
 // ==============================
 (function () {
+  const photoItems = document.querySelectorAll('.photo-item');
+  if (photoItems.length === 0) return;
+
   const lightbox = document.createElement('div');
   lightbox.className = 'gallery-lightbox';
   lightbox.innerHTML = `
