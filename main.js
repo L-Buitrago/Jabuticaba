@@ -616,3 +616,85 @@ animatedHeadings.forEach(heading => {
         }
     });
 });
+
+// ==============================
+// FLOATING NAV MENU
+// ==============================
+const floatingMenuBtn = document.getElementById('floatingMenuBtn');
+const floatingNavOverlay = document.getElementById('floatingNavOverlay');
+
+if (floatingMenuBtn && floatingNavOverlay) {
+    // Show/hide button based on scroll position (after hero)
+    ScrollTrigger.create({
+        trigger: '.hero',
+        start: 'bottom top',
+        onEnter: () => {
+            floatingMenuBtn.classList.add('visible');
+            floatingMenuBtn.classList.add('on-light');
+        },
+        onLeaveBack: () => {
+            floatingMenuBtn.classList.remove('visible');
+            floatingMenuBtn.classList.remove('on-light');
+            // Also close menu if open and scrolled back to hero
+            if (floatingNavOverlay.classList.contains('active')) {
+                closeFloatingMenu();
+            }
+        }
+    });
+
+    function openFloatingMenu() {
+        floatingMenuBtn.classList.add('active');
+        floatingNavOverlay.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeFloatingMenu() {
+        floatingMenuBtn.classList.remove('active');
+        floatingNavOverlay.classList.remove('active');
+        document.body.style.overflow = '';
+    }
+
+    // Toggle on button click
+    floatingMenuBtn.addEventListener('click', () => {
+        if (floatingNavOverlay.classList.contains('active')) {
+            closeFloatingMenu();
+        } else {
+            openFloatingMenu();
+        }
+    });
+
+    // Close when clicking nav links
+    floatingNavOverlay.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', (e) => {
+            const href = link.getAttribute('href');
+            
+            // For anchor links, smooth scroll
+            if (href.startsWith('#')) {
+                e.preventDefault();
+                closeFloatingMenu();
+                
+                // Small delay for the close animation
+                setTimeout(() => {
+                    const target = document.querySelector(href);
+                    if (target) {
+                        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                }, 300);
+            } else {
+                // External links (like galeria.html)
+                closeFloatingMenu();
+            }
+        });
+    });
+
+    // Close on Escape
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && floatingNavOverlay.classList.contains('active')) {
+            closeFloatingMenu();
+        }
+    });
+
+    // Close when clicking the background
+    floatingNavOverlay.querySelector('.floating-nav-bg').addEventListener('click', closeFloatingMenu);
+}
+
