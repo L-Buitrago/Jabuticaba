@@ -2,6 +2,38 @@
    GALERIA PAGE — SIMPLE CSS GRID
    ============================================= */
 
+/* ==============================
+   LOADER ANIMATION
+   ============================== */
+.gallery-loader {
+  position: fixed;
+  inset: 0;
+  background: var(--bg-soft);
+  z-index: 99999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.loader-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.loader-tree {
+  width: 150px;
+  height: 150px;
+  overflow: visible;
+}
+
+/* Initially hide body scroll during loader */
+body.loading-gallery {
+  overflow: hidden;
+}
+
 .galeria-page {
   background: var(--bg-soft);
   padding-top: 120px; /* Space for the navbar */

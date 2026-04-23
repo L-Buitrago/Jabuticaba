@@ -1,17 +1,73 @@
 gsap.registerPlugin(ScrollTrigger);
 
 // ==============================
+// LOADER ANIMATION
+// ==============================
+document.body.classList.add('loading-gallery');
+
+document.addEventListener("DOMContentLoaded", () => {
+    const paths = document.querySelectorAll('.tree-path');
+    const loader = document.getElementById('galleryLoader');
+    const logoText = document.querySelector('.loader-logo-text');
+    
+    // Fallback se o loader não existir na página (ex: desenvolvimento local corrompido)
+    if (!loader) {
+        document.body.classList.remove('loading-gallery');
+        initScrollReveals();
+        return;
+    }
+
+    // Preparar as linhas da árvore para serem desenhadas
+    paths.forEach(path => {
+        const length = path.getTotalLength();
+        path.style.strokeDasharray = length;
+        path.style.strokeDashoffset = length;
+    });
+
+    const tl = gsap.timeline({
+        onComplete: () => {
+            gsap.to(loader, {
+                opacity: 0,
+                duration: 0.8,
+                ease: "power2.inOut",
+                onComplete: () => {
+                    loader.style.display = 'none';
+                    document.body.classList.remove('loading-gallery');
+                    initScrollReveals();
+                }
+            });
+        }
+    });
+
+    // Desenhar a árvore
+    tl.to(paths, {
+        strokeDashoffset: 0,
+        duration: 1.5,
+        stagger: 0.05,
+        ease: "power2.out"
+    })
+    // Aparecer texto
+    .to(logoText, {
+        opacity: 1,
+        y: -10,
+        duration: 0.8,
+        ease: "power2.out"
+    }, "-=0.5")
+    // Pequena pausa para contemplação
+    .to({}, { duration: 0.6 });
+});
+
+// ==============================
 // SCROLL REVEALS
 // ==============================
-document.addEventListener("DOMContentLoaded", () => {
+function initScrollReveals() {
     // Header reveal
     gsap.from(".gallery-header h1, .gallery-header p", {
         y: 30,
         opacity: 0,
         duration: 1,
         stagger: 0.2,
-        ease: "power3.out",
-        delay: 0.2
+        ease: "power3.out"
     });
 
     // Grid items reveal
@@ -29,7 +85,7 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         });
     });
-});
+}
 
 // ==============================
 // LIGHTBOX
