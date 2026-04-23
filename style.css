@@ -758,7 +758,7 @@ p {
   background: var(--green-50);
   border-radius: var(--radius-md);
   border: 1px solid var(--green-100);
-  transition: all 0.3s;
+  transition: transform 0.3s var(--ease-smooth), background-color 0.3s var(--ease-smooth), border-color 0.3s var(--ease-smooth);
 }
 .impl-feature:hover {
   background: var(--green-100);
