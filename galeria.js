@@ -56,30 +56,41 @@ document.addEventListener("DOMContentLoaded", () => {
 // SCROLL REVEALS
 // ==============================
 function initScrollReveals() {
-    // Header reveal
-    gsap.from(".gallery-header h1, .gallery-header p", {
-        y: 30,
-        opacity: 0,
-        duration: 1,
-        stagger: 0.2,
-        ease: "power3.out"
-    });
-
-    // Grid items reveal
-    const revealElements = document.querySelectorAll('.reveal-up');
-    revealElements.forEach(el => {
-        gsap.to(el, {
-            y: 0,
-            opacity: 1,
-            duration: 0.8,
-            ease: 'power3.out',
-            scrollTrigger: {
-                trigger: el,
-                start: 'top 85%',
-                toggleActions: 'play none none reverse'
-            }
+    // Permitir que o navegador recalcule o layout sem o overflow: hidden do loader
+    setTimeout(() => {
+        // Header reveal
+        gsap.from(".gallery-header h1, .gallery-header p", {
+            y: 30,
+            opacity: 0,
+            duration: 1,
+            stagger: 0.2,
+            ease: "power3.out"
         });
-    });
+
+        // Grid items reveal
+        const revealElements = document.querySelectorAll('.reveal-up');
+        
+        // Em vez de animar direto, definimos o estado inicial via GSAP
+        // para garantir que não haja conflito com CSS
+        gsap.set(revealElements, { y: 30, opacity: 0 });
+
+        revealElements.forEach(el => {
+            gsap.to(el, {
+                y: 0,
+                opacity: 1,
+                duration: 0.8,
+                ease: 'power3.out',
+                scrollTrigger: {
+                    trigger: el,
+                    start: 'top 85%',
+                    toggleActions: 'play none none reverse'
+                }
+            });
+        });
+
+        // Forçar atualização do ScrollTrigger para calcular as posições corretamente
+        ScrollTrigger.refresh();
+    }, 100);
 }
 
 // ==============================
