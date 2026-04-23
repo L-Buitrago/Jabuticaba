@@ -9,6 +9,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const paths = document.querySelectorAll('.tree-path');
     const loader = document.getElementById('galleryLoader');
     const logoText = document.querySelector('.loader-logo-text');
+    const dots = document.querySelectorAll('.jabuticabas circle');
     
     // Fallback se o loader não existir na página (ex: desenvolvimento local corrompido)
     if (!loader) {
@@ -23,6 +24,9 @@ document.addEventListener("DOMContentLoaded", () => {
         path.style.strokeDasharray = length;
         path.style.strokeDashoffset = length;
     });
+
+    // Esconder as frutinhas no início
+    gsap.set(dots, { scale: 0, transformOrigin: "center center" });
 
     const tl = gsap.timeline({
         onComplete: () => {
@@ -42,10 +46,17 @@ document.addEventListener("DOMContentLoaded", () => {
     // Desenhar a árvore
     tl.to(paths, {
         strokeDashoffset: 0,
-        duration: 1.5,
-        stagger: 0.05,
+        duration: 1.8,
+        stagger: 0.08,
         ease: "power2.out"
     })
+    // Aparecer jabuticabas nas pontas
+    .to(dots, {
+        scale: 1,
+        duration: 0.5,
+        stagger: 0.05,
+        ease: "back.out(2)"
+    }, "-=1.0")
     // Aparecer texto
     .to(logoText, {
         opacity: 1,
@@ -54,7 +65,7 @@ document.addEventListener("DOMContentLoaded", () => {
         ease: "power2.out"
     }, "-=0.5")
     // Pequena pausa para contemplação
-    .to({}, { duration: 0.6 });
+    .to({}, { duration: 0.8 });
 });
 
 // ==============================

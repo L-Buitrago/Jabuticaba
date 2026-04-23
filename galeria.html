@@ -23,38 +23,58 @@
     <!-- Gallery Tree Loader -->
     <div class="gallery-loader" id="galleryLoader">
         <div class="loader-content">
-            <svg class="loader-tree" viewBox="0 0 200 200" fill="none" stroke="var(--green-800)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                <!-- Trunk -->
-                <path class="tree-path" d="M100 180 Q98 150 100 120" />
-                <path class="tree-path" d="M100 180 Q105 160 100 120" />
-                
-                <!-- Left Main -->
-                <path class="tree-path" d="M100 130 Q80 110 60 80 Q45 60 30 50" />
-                <path class="tree-path" d="M80 110 Q60 90 40 70" />
-                <path class="tree-path" d="M60 80 Q45 50 40 30" />
-                
-                <!-- Right Main -->
-                <path class="tree-path" d="M100 125 Q120 110 140 80 Q155 60 170 50" />
-                <path class="tree-path" d="M120 110 Q140 90 160 70" />
-                <path class="tree-path" d="M140 80 Q155 50 160 30" />
+            <svg class="loader-tree" viewBox="0 0 300 250" fill="none" stroke="var(--green-800)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width: 250px; height: 200px;">
+                <!-- Trunks -->
+                <path class="tree-path" d="M140 230 C 145 200, 150 170, 150 140" />
+                <path class="tree-path" d="M150 235 C 152 200, 145 170, 145 140" />
+                <path class="tree-path" d="M160 230 C 155 200, 155 170, 155 140" />
+                <path class="tree-path" d="M145 230 C 135 200, 140 180, 150 140" />
 
-                <!-- Center Main -->
-                <path class="tree-path" d="M100 120 Q95 90 90 60 Q85 40 80 20" />
-                <path class="tree-path" d="M100 120 Q105 90 110 60 Q115 40 120 20" />
+                <!-- Left side branches -->
+                <path class="tree-path" d="M150 140 C 130 140, 100 120, 70 120 C 50 120, 40 110, 30 100" />
+                <path class="tree-path" d="M70 120 C 60 100, 65 80, 50 50" />
+                <path class="tree-path" d="M100 120 C 90 90, 80 80, 70 50" />
+                <path class="tree-path" d="M145 140 C 120 120, 110 90, 100 50" />
+                <path class="tree-path" d="M110 90 C 100 70, 110 50, 100 30" />
                 
-                <!-- Left Inner -->
-                <path class="tree-path" d="M90 60 Q75 45 60 35" />
-                <path class="tree-path" d="M95 90 Q80 70 70 50" />
-                
-                <!-- Right Inner -->
-                <path class="tree-path" d="M110 60 Q125 45 140 35" />
-                <path class="tree-path" d="M105 90 Q120 70 130 50" />
-                
-                <!-- More sub-branches for a "dry tree" dense look -->
-                <path class="tree-path" d="M40 70 Q30 50 20 40" />
-                <path class="tree-path" d="M160 70 Q170 50 180 40" />
-                <path class="tree-path" d="M70 50 Q60 30 50 20" />
-                <path class="tree-path" d="M130 50 Q140 30 150 20" />
+                <!-- Left outer twigs -->
+                <path class="tree-path" d="M50 50 C 45 40, 35 35, 30 25" />
+                <path class="tree-path" d="M70 50 C 60 30, 80 25, 75 15" />
+
+                <!-- Right side branches -->
+                <path class="tree-path" d="M155 140 C 170 140, 200 130, 230 110 C 250 95, 260 90, 270 80" />
+                <path class="tree-path" d="M230 110 C 240 90, 230 70, 250 40" />
+                <path class="tree-path" d="M200 130 C 210 100, 195 80, 210 50" />
+                <path class="tree-path" d="M155 140 C 180 120, 175 90, 185 50" />
+                <path class="tree-path" d="M175 90 C 165 70, 175 50, 160 30" />
+
+                <!-- Right outer twigs -->
+                <path class="tree-path" d="M250 40 C 240 30, 255 20, 260 10" />
+                <path class="tree-path" d="M210 50 C 205 35, 220 25, 215 15" />
+
+                <!-- Center branches -->
+                <path class="tree-path" d="M150 140 C 145 110, 140 80, 130 40" />
+                <path class="tree-path" d="M155 140 C 160 110, 150 80, 155 40" />
+                <path class="tree-path" d="M140 80 C 130 60, 145 45, 140 25" />
+                <path class="tree-path" d="M150 80 C 165 60, 155 45, 170 25" />
+
+                <!-- The Jabuticabas (small fruits on branches) -->
+                <g class="jabuticabas" fill="var(--green-800)" stroke="none">
+                    <circle cx="80" cy="125" r="3" />
+                    <circle cx="95" cy="130" r="2.5" />
+                    <circle cx="115" cy="100" r="3" />
+                    <circle cx="105" cy="80" r="2" />
+                    
+                    <circle cx="210" cy="125" r="3" />
+                    <circle cx="190" cy="115" r="2.5" />
+                    <circle cx="240" cy="100" r="3" />
+                    <circle cx="250" cy="85" r="2" />
+                    
+                    <circle cx="140" cy="100" r="3" />
+                    <circle cx="160" cy="90" r="2.5" />
+                    <circle cx="135" cy="70" r="2" />
+                    <circle cx="170" cy="65" r="3" />
+                </g>
             </svg>
             <div class="loader-logo-text" style="font-family: var(--font-handwritten); font-size: 2rem; color: var(--green-800); margin-top: 10px; opacity: 0; text-transform: uppercase;">Jabuticabas</div>
         </div>
