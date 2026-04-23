@@ -716,16 +716,22 @@ p {
   background: var(--green-50);
   border-radius: var(--radius-xl);
   min-height: 500px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   overflow: hidden;
-  box-shadow: var(--shadow-lg);
+  border: 1px dashed var(--green-200);
 }
-.implantacao-image img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+.placeholder-text {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  text-align: center;
+}
+.placeholder-text i {
   display: block;
-}
-.implantacao-image.has-image {
+  margin: 0 auto 12px;
+  color: var(--green-300);
+}.has-image {
   border: none;
   background: none;
 }
