@@ -562,3 +562,57 @@ if (whatsappBtn) {
     }, 4000);
 }
 
+// ==============================
+// WORD REVEAL ANIMATIONS
+// ==============================
+const animatedHeadings = document.querySelectorAll('.animate-words');
+
+animatedHeadings.forEach(heading => {
+    const text = heading.textContent.trim();
+    heading.textContent = '';
+    
+    // Split by words
+    const words = text.split(' ');
+    
+    words.forEach((word, index) => {
+        const wordWrapper = document.createElement('span');
+        wordWrapper.style.display = 'inline-block';
+        wordWrapper.style.overflow = 'hidden';
+        wordWrapper.style.verticalAlign = 'top';
+        
+        const wordSpan = document.createElement('span');
+        wordSpan.textContent = word;
+        wordSpan.style.display = 'inline-block';
+        wordSpan.style.transform = 'translateY(100%)';
+        wordSpan.style.opacity = '0';
+        
+        wordWrapper.appendChild(wordSpan);
+        heading.appendChild(wordWrapper);
+        
+        if (index < words.length - 1) {
+            heading.appendChild(document.createTextNode(' '));
+        }
+    });
+
+    ScrollTrigger.create({
+        trigger: heading,
+        start: "top 90%",
+        onEnter: () => {
+            gsap.to(heading.querySelectorAll('span > span'), {
+                y: "0%",
+                opacity: 1,
+                duration: 0.8,
+                stagger: 0.1,
+                ease: "back.out(1.4)",
+                overwrite: true
+            });
+        },
+        onLeaveBack: () => {
+            gsap.set(heading.querySelectorAll('span > span'), {
+                y: "100%",
+                opacity: 0,
+                overwrite: true
+            });
+        }
+    });
+});
