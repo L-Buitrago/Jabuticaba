@@ -66,6 +66,26 @@ function enableLoop() {
     const heroHandwritten = document.getElementById('heroHandwritten');
     const navbar = document.querySelector('.navbar');
 
+    // Check if intro was already played this session
+    const introPlayed = sessionStorage.getItem('introPlayed');
+
+    if (introPlayed) {
+        // Skip intro
+        overlay.style.display = 'none';
+        overlay.classList.add('done');
+        document.body.style.overflow = '';
+        gsap.set(navbar, { opacity: 1, y: 0 });
+        gsap.set(heroTitle, { opacity: 1, y: 0 });
+        gsap.set(heroHandwritten, { opacity: 1, y: 0 });
+        enableLoop();
+        
+        // Ensure spans are visible if they were split
+        setTimeout(() => {
+            gsap.set('.phrase-line span', { opacity: 1, y: 0 });
+        }, 100);
+        return;
+    }
+
     // Hide navbar during intro
     gsap.set(navbar, { opacity: 0, y: -40 });
 
@@ -103,6 +123,7 @@ function enableLoop() {
                 // Stop intro video, enable loop on hero video
                 introVideo.pause();
                 enableLoop();
+                sessionStorage.setItem('introPlayed', 'true');
                 setTimeout(() => { overlay.style.display = 'none'; }, 100);
             }
         });
