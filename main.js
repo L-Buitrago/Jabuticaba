@@ -342,9 +342,12 @@ ScrollTrigger.batch(".reveal-up", {
         opacity: 1, 
         y: 0, 
         scale: 1, 
-        duration: 1.2, 
-        stagger: 0.15, 
-        ease: "power4.out", 
+        duration: 0.8, 
+        stagger: {
+            each: 0.15,
+            from: "start"
+        }, 
+        ease: "back.out(1.7)", 
         overwrite: true
     }),
     onLeaveBack: batch => gsap.set(batch, {
@@ -353,7 +356,7 @@ ScrollTrigger.batch(".reveal-up", {
         scale: 0.98, 
         overwrite: true
     }),
-    start: "top 90%",
+    start: "top 92%", // Trigger even earlier
 });
 
 // Batch reveal-left
@@ -361,9 +364,9 @@ ScrollTrigger.batch(".reveal-left", {
     onEnter: batch => gsap.to(batch, {
         opacity: 1, 
         x: 0, 
-        duration: 1.2, 
+        duration: 0.8, 
         stagger: 0.15, 
-        ease: "power4.out", 
+        ease: "back.out(1.4)", 
         overwrite: true
     }),
     onLeaveBack: batch => gsap.set(batch, {
@@ -371,7 +374,7 @@ ScrollTrigger.batch(".reveal-left", {
         x: -30, 
         overwrite: true
     }),
-    start: "top 90%",
+    start: "top 92%",
 });
 
 // Batch reveal-right
@@ -379,9 +382,9 @@ ScrollTrigger.batch(".reveal-right", {
     onEnter: batch => gsap.to(batch, {
         opacity: 1, 
         x: 0, 
-        duration: 1.2, 
+        duration: 0.8, 
         stagger: 0.15, 
-        ease: "power4.out", 
+        ease: "back.out(1.4)", 
         overwrite: true
     }),
     onLeaveBack: batch => gsap.set(batch, {
@@ -389,7 +392,7 @@ ScrollTrigger.batch(".reveal-right", {
         x: 30, 
         overwrite: true
     }),
-    start: "top 90%",
+    start: "top 92%",
 });
 
 // ==============================

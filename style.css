@@ -875,7 +875,7 @@ p {
   border: 1px solid var(--green-100);
   border-radius: var(--radius-lg);
   text-align: center;
-  transition: all 0.4s var(--ease-smooth);
+  transition: box-shadow 0.4s var(--ease-smooth), border-color 0.4s var(--ease-smooth), transform 0.4s var(--ease-smooth);
   position: relative;
   overflow: hidden;
 }
@@ -1032,7 +1032,7 @@ p {
   display: flex;
   flex-direction: column;
   gap: 20px;
-  transition: all 0.3s var(--ease-smooth);
+  transition: box-shadow 0.3s var(--ease-smooth), transform 0.3s var(--ease-smooth), border-color 0.3s var(--ease-smooth);
 }
 .testimonial-card:hover {
   box-shadow: var(--shadow-md);
