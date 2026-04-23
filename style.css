@@ -1535,15 +1535,18 @@ footer {
    ============================== */
 .reveal-up {
   opacity: 0;
-  transform: translateY(40px);
+  transform: translateY(30px) scale(0.98);
+  will-change: transform, opacity;
 }
 .reveal-left {
   opacity: 0;
-  transform: translateX(-40px);
+  transform: translateX(-30px);
+  will-change: transform, opacity;
 }
 .reveal-right {
   opacity: 0;
-  transform: translateX(40px);
+  transform: translateX(30px);
+  will-change: transform, opacity;
 }
 
 /* ==============================

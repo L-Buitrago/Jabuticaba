@@ -333,47 +333,63 @@ heroScrollTl.to('.hero-content', {
 
 
 // ==============================
-// SCROLL REVEALS
+// SCROLL REVEALS (Batching for better staggering)
 // ==============================
-const revealElements = document.querySelectorAll('.reveal-up');
-revealElements.forEach(el => {
-    gsap.to(el, {
-        y: 0,
-        opacity: 1,
-        duration: 1,
-        ease: 'power3.out',
-        scrollTrigger: {
-            trigger: el,
-            start: 'top 85%',
-            toggleActions: 'play none none reverse'
-        }
-    });
+
+// Batch reveal-up (most common)
+ScrollTrigger.batch(".reveal-up", {
+    onEnter: batch => gsap.to(batch, {
+        opacity: 1, 
+        y: 0, 
+        scale: 1, 
+        duration: 1.2, 
+        stagger: 0.15, 
+        ease: "power4.out", 
+        overwrite: true
+    }),
+    onLeaveBack: batch => gsap.set(batch, {
+        opacity: 0, 
+        y: 30, 
+        scale: 0.98, 
+        overwrite: true
+    }),
+    start: "top 90%",
 });
 
-gsap.utils.toArray('.reveal-left').forEach(el => {
-    gsap.to(el, {
-        x: 0,
-        opacity: 1,
-        duration: 1.2,
-        ease: 'power3.out',
-        scrollTrigger: {
-            trigger: el,
-            start: 'top 80%'
-        }
-    });
+// Batch reveal-left
+ScrollTrigger.batch(".reveal-left", {
+    onEnter: batch => gsap.to(batch, {
+        opacity: 1, 
+        x: 0, 
+        duration: 1.2, 
+        stagger: 0.15, 
+        ease: "power4.out", 
+        overwrite: true
+    }),
+    onLeaveBack: batch => gsap.set(batch, {
+        opacity: 0, 
+        x: -30, 
+        overwrite: true
+    }),
+    start: "top 90%",
 });
 
-gsap.utils.toArray('.reveal-right').forEach(el => {
-    gsap.to(el, {
-        x: 0,
-        opacity: 1,
-        duration: 1.2,
-        ease: 'power3.out',
-        scrollTrigger: {
-            trigger: el,
-            start: 'top 80%'
-        }
-    });
+// Batch reveal-right
+ScrollTrigger.batch(".reveal-right", {
+    onEnter: batch => gsap.to(batch, {
+        opacity: 1, 
+        x: 0, 
+        duration: 1.2, 
+        stagger: 0.15, 
+        ease: "power4.out", 
+        overwrite: true
+    }),
+    onLeaveBack: batch => gsap.set(batch, {
+        opacity: 0, 
+        x: 30, 
+        overwrite: true
+    }),
+    start: "top 90%",
 });
 
 // ==============================
