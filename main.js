@@ -417,21 +417,56 @@ ScrollTrigger.batch(".reveal-right", {
 });
 
 // ==============================
-// AMENITIES INTERACTIVE LIST (UNTOUCHED)
+// AMENITIES INTERACTIVE LIST (Auto-cycle)
 // ==============================
+const amenitiesList = document.querySelector('.amenities-list');
 const listItems = document.querySelectorAll('.amenities-list li');
 const images = document.querySelectorAll('.stack-img');
+let currentAmenityIndex = 0;
+let amenityInterval;
 
-listItems.forEach(item => {
+function showAmenity(index) {
+    listItems.forEach(li => li.classList.remove('active'));
+    images.forEach(img => img.classList.remove('active'));
+    
+    listItems[index].classList.add('active');
+    document.getElementById(`img-${index}`).classList.add('active');
+    currentAmenityIndex = index;
+}
+
+function nextAmenity() {
+    let nextIndex = (currentAmenityIndex + 1) % listItems.length;
+    showAmenity(nextIndex);
+}
+
+function startAmenityCycle() {
+    stopAmenityCycle();
+    amenityInterval = setInterval(nextAmenity, 3000);
+}
+
+function stopAmenityCycle() {
+    if (amenityInterval) {
+        clearInterval(amenityInterval);
+    }
+}
+
+// Hover interactions
+listItems.forEach((item, index) => {
     item.addEventListener('mouseenter', () => {
-        listItems.forEach(li => li.classList.remove('active'));
-        images.forEach(img => img.classList.remove('active'));
-        
-        item.classList.add('active');
-        const index = item.getAttribute('data-index');
-        document.getElementById(`img-${index}`).classList.add('active');
+        stopAmenityCycle();
+        showAmenity(index);
     });
 });
+
+// Resume when mouse leaves the list area
+if (amenitiesList) {
+    amenitiesList.addEventListener('mouseleave', () => {
+        startAmenityCycle();
+    });
+}
+
+// Start automatically
+startAmenityCycle();
 
 // ==============================
 // STATS COUNTER ANIMATION
