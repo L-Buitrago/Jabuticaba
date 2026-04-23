@@ -551,9 +551,6 @@ p {
   margin: -40px;
   padding: 60px 40px 40px;
 }
-.bento-content h3, .bento-content p {
-  color: #fff;
-}
 .bento-item h3 {
   font-size: 1.8rem;
   margin-bottom: 12px;
@@ -562,6 +559,10 @@ p {
 .bento-item p {
   color: var(--text-body);
   font-size: 0.95rem;
+}
+.bento-item.bento-large .bento-content h3, 
+.bento-item.bento-large .bento-content p {
+  color: #FFFFFF !important;
 }
 .bento-icon {
   margin-bottom: auto;
