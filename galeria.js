@@ -6,27 +6,19 @@ gsap.registerPlugin(ScrollTrigger);
 document.body.classList.add('loading-gallery');
 
 document.addEventListener("DOMContentLoaded", () => {
-    const paths = document.querySelectorAll('.tree-path');
+    const chars = document.querySelectorAll('.loader-logo-text .char');
     const loader = document.getElementById('galleryLoader');
-    const logoText = document.querySelector('.loader-logo-text');
-    const dots = document.querySelectorAll('.jabuticabas circle');
+    const logoContainer = document.querySelector('.loader-logo-text');
     
     // Fallback se o loader não existir na página (ex: desenvolvimento local corrompido)
-    if (!loader) {
+    if (!loader || chars.length === 0) {
         document.body.classList.remove('loading-gallery');
         initScrollReveals();
         return;
     }
 
-    // Preparar as linhas da árvore para serem desenhadas
-    paths.forEach(path => {
-        const length = path.getTotalLength();
-        path.style.strokeDasharray = length;
-        path.style.strokeDashoffset = length;
-    });
-
-    // Esconder as frutinhas no início
-    gsap.set(dots, { scale: 0, transformOrigin: "center center" });
+    // Posição inicial das letras (escondidas abaixo)
+    gsap.set(chars, { y: 150 });
 
     const tl = gsap.timeline({
         onComplete: () => {
@@ -43,29 +35,21 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    // Desenhar a árvore
-    tl.to(paths, {
-        strokeDashoffset: 0,
-        duration: 1.8,
+    // Animar letras subindo em cascata
+    tl.to(chars, {
+        y: 0,
+        duration: 1.2,
         stagger: 0.08,
-        ease: "power2.out"
+        ease: "back.out(1.7)"
     })
-    // Aparecer jabuticabas nas pontas
-    .to(dots, {
-        scale: 1,
-        duration: 0.5,
-        stagger: 0.05,
-        ease: "back.out(2)"
-    }, "-=1.0")
-    // Aparecer texto
-    .to(logoText, {
-        opacity: 1,
-        y: -10,
-        duration: 0.8,
-        ease: "power2.out"
-    }, "-=0.5")
-    // Pequena pausa para contemplação
-    .to({}, { duration: 0.8 });
+    // Aumentar o espaçamento entre as letras para um efeito elegante
+    .to(logoContainer, {
+        letterSpacing: "12px",
+        duration: 1.5,
+        ease: "power3.out"
+    }, "-=0.6")
+    // Pequena pausa antes de revelar a galeria
+    .to({}, { duration: 0.5 });
 });
 
 // ==============================
