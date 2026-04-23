@@ -518,29 +518,6 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 });
 
 // ==============================
-// MOBILE MENU
-// ==============================
-const mobileToggle = document.getElementById('mobileToggle');
-const mobileMenu = document.getElementById('mobileMenu');
-
-if (mobileToggle && mobileMenu) {
-    mobileToggle.addEventListener('click', () => {
-        const isActive = mobileMenu.classList.toggle('active');
-        mobileToggle.classList.toggle('active');
-        document.body.style.overflow = isActive ? 'hidden' : '';
-    });
-
-    // Close menu when clicking a link
-    mobileMenu.querySelectorAll('a').forEach(link => {
-        link.addEventListener('click', () => {
-            mobileMenu.classList.remove('active');
-            mobileToggle.classList.remove('active');
-            document.body.style.overflow = '';
-        });
-    });
-}
-
-// ==============================
 // WHATSAPP BUTTON VISIBILITY
 // ==============================
 const whatsappBtn = document.getElementById('whatsappBtn');
@@ -618,71 +595,89 @@ animatedHeadings.forEach(heading => {
 });
 
 // ==============================
-// FLOATING NAV MENU
+// MOBILE MENU & FLOATING MENU UNIFICATION
 // ==============================
+const mobileToggle = document.getElementById('mobileToggle');
 const floatingMenuBtn = document.getElementById('floatingMenuBtn');
 const floatingNavOverlay = document.getElementById('floatingNavOverlay');
 
-if (floatingMenuBtn && floatingNavOverlay) {
-    // Show/hide button based on scroll position (after hero)
-    ScrollTrigger.create({
-        trigger: '.hero',
-        start: 'bottom top',
-        onEnter: () => {
-            floatingMenuBtn.classList.add('visible');
-            floatingMenuBtn.classList.add('on-light');
-        },
-        onLeaveBack: () => {
-            floatingMenuBtn.classList.remove('visible');
-            floatingMenuBtn.classList.remove('on-light');
-            // Also close menu if open and scrolled back to hero
-            if (floatingNavOverlay.classList.contains('active')) {
-                closeFloatingMenu();
-            }
-        }
-    });
-
-    function openFloatingMenu() {
-        floatingMenuBtn.classList.add('active');
+if (floatingNavOverlay) {
+    function openMenu() {
+        if (floatingMenuBtn) floatingMenuBtn.classList.add('active');
+        if (mobileToggle) mobileToggle.classList.add('active');
         floatingNavOverlay.classList.add('active');
         document.body.style.overflow = 'hidden';
+        
+        // Ensure icons are rendered
+        if (typeof lucide !== 'undefined') {
+            lucide.createIcons();
+        }
     }
 
-    function closeFloatingMenu() {
-        floatingMenuBtn.classList.remove('active');
+    function closeMenu() {
+        if (floatingMenuBtn) floatingMenuBtn.classList.remove('active');
+        if (mobileToggle) mobileToggle.classList.remove('active');
         floatingNavOverlay.classList.remove('active');
         document.body.style.overflow = '';
     }
 
-    // Toggle on button click
-    floatingMenuBtn.addEventListener('click', () => {
+    function toggleMenu() {
         if (floatingNavOverlay.classList.contains('active')) {
-            closeFloatingMenu();
+            closeMenu();
         } else {
-            openFloatingMenu();
+            openMenu();
         }
-    });
+    }
 
-    // Close when clicking nav links
+    // Navbar Toggle (Mobile)
+    if (mobileToggle) {
+        mobileToggle.addEventListener('click', toggleMenu);
+    }
+
+    // Floating Button Toggle
+    if (floatingMenuBtn) {
+        floatingMenuBtn.addEventListener('click', toggleMenu);
+
+        // Show/hide floating button based on scroll (Home page only logic)
+        if (document.querySelector('.hero')) {
+            ScrollTrigger.create({
+                trigger: '.hero',
+                start: 'bottom top',
+                onEnter: () => {
+                    floatingMenuBtn.classList.add('visible');
+                    floatingMenuBtn.classList.add('on-light');
+                },
+                onLeaveBack: () => {
+                    floatingMenuBtn.classList.remove('visible');
+                    floatingMenuBtn.classList.remove('on-light');
+                    if (floatingNavOverlay.classList.contains('active')) {
+                        closeMenu();
+                    }
+                }
+            });
+        }
+    }
+
+    // Close on link click
     floatingNavOverlay.querySelectorAll('a').forEach(link => {
         link.addEventListener('click', (e) => {
             const href = link.getAttribute('href');
-            
-            // For anchor links, smooth scroll
-            if (href.startsWith('#')) {
-                e.preventDefault();
-                closeFloatingMenu();
+            if (href.includes('#') && !href.startsWith('http')) {
+                const parts = href.split('#');
+                const id = parts[parts.length - 1];
+                const target = document.getElementById(id);
                 
-                // Small delay for the close animation
-                setTimeout(() => {
-                    const target = document.querySelector(href);
-                    if (target) {
-                        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                if (target) {
+                    if (!href.includes('.html') || window.location.pathname.includes('index.html') || window.location.pathname === '/') {
+                        e.preventDefault();
+                        closeMenu();
+                        setTimeout(() => {
+                            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        }, 300);
                     }
-                }, 300);
+                }
             } else {
-                // External links (like galeria.html)
-                closeFloatingMenu();
+                closeMenu();
             }
         });
     });
@@ -690,11 +685,12 @@ if (floatingMenuBtn && floatingNavOverlay) {
     // Close on Escape
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape' && floatingNavOverlay.classList.contains('active')) {
-            closeFloatingMenu();
+            closeMenu();
         }
     });
 
-    // Close when clicking the background
-    floatingNavOverlay.querySelector('.floating-nav-bg').addEventListener('click', closeFloatingMenu);
+    // Close on background click
+    const navBg = floatingNavOverlay.querySelector('.floating-nav-bg');
+    if (navBg) navBg.addEventListener('click', closeMenu);
 }
 

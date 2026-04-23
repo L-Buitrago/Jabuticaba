@@ -104,3 +104,84 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     });
 })();
+
+// ==============================
+// MOBILE MENU & FLOATING MENU UNIFICATION
+// ==============================
+const mobileToggle = document.getElementById('mobileToggle');
+const floatingMenuBtn = document.getElementById('floatingMenuBtn');
+const floatingNavOverlay = document.getElementById('floatingNavOverlay');
+
+if (floatingNavOverlay) {
+    function openMenu() {
+        if (floatingMenuBtn) floatingMenuBtn.classList.add('active');
+        if (mobileToggle) mobileToggle.classList.add('active');
+        floatingNavOverlay.classList.add('active');
+        document.body.style.overflow = 'hidden';
+
+        // Ensure icons are rendered
+        if (typeof lucide !== 'undefined') {
+            lucide.createIcons();
+        }
+    }
+
+    function closeMenu() {
+        if (floatingMenuBtn) floatingMenuBtn.classList.remove('active');
+        if (mobileToggle) mobileToggle.classList.remove('active');
+        floatingNavOverlay.classList.remove('active');
+        document.body.style.overflow = '';
+    }
+
+    function toggleMenu() {
+        if (floatingNavOverlay.classList.contains('active')) {
+            closeMenu();
+        } else {
+            openMenu();
+        }
+    }
+
+    // Navbar Toggle (Mobile)
+    if (mobileToggle) {
+        mobileToggle.addEventListener('click', toggleMenu);
+    }
+
+    // Floating Button Toggle
+    if (floatingMenuBtn) {
+        floatingMenuBtn.addEventListener('click', toggleMenu);
+    }
+
+    // Close on link click
+    floatingNavOverlay.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', (e) => {
+            const href = link.getAttribute('href');
+            if (href.includes('#') && !href.startsWith('http')) {
+                const parts = href.split('#');
+                const id = parts[parts.length - 1];
+                const target = document.getElementById(id);
+                
+                if (target) {
+                    if (!href.includes('.html') || window.location.pathname.includes('index.html') || window.location.pathname === '/') {
+                        e.preventDefault();
+                        closeMenu();
+                        setTimeout(() => {
+                            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        }, 300);
+                    }
+                }
+            } else {
+                closeMenu();
+            }
+        });
+    });
+
+    // Close on Escape
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && floatingNavOverlay.classList.contains('active')) {
+            closeMenu();
+        }
+    });
+
+    // Close on background click
+    const navBg = floatingNavOverlay.querySelector('.floating-nav-bg');
+    if (navBg) navBg.addEventListener('click', closeMenu);
+}
